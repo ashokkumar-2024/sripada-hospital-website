@@ -423,124 +423,126 @@ export function Header({ activeSection, onNavigate, onBookAppointment }: HeaderP
         </div>
       </div>
 
-      {/* ── MOBILE DRAWER ── */}
-      <div className={cn(
-        "lg:hidden bg-white border-t border-slate-100 overflow-hidden transition-all duration-300",
-        mobileOpen ? "max-h-[85vh]" : "max-h-0"
-      )}>
-        <div className="overflow-y-auto max-h-[80vh]">
+      {/* ── MOBILE DRAWER — full screen overlay ── */}
+      {mobileOpen && (
+        <div className="lg:hidden fixed inset-0 z-40 flex flex-col" style={{ top: 0 }}>
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
 
-          {/* Mobile — emergency strip */}
-          <div className="bg-[#0b1f4a] px-4 py-3 flex items-center justify-between">
-            <a href="tel:+919XXXXXXXXX" className="flex items-center gap-2 text-white text-sm font-bold whitespace-nowrap">
-              <Phone className="h-4 w-4 text-[#0d9488] flex-shrink-0" />
-              <span className="whitespace-nowrap">Emergency: +91 9XXX XXX XXX</span>
-            </a>
-            <span className="text-white/50 text-xs whitespace-nowrap flex-shrink-0">24/7</span>
-          </div>
+          {/* Panel */}
+          <div className="absolute right-0 top-0 h-full w-[85vw] max-w-sm bg-white flex flex-col shadow-2xl">
 
-          <nav className="px-4 py-3 space-y-0.5">
+            {/* Header */}
+            <div className="bg-[#0b1f4a] px-4 py-4 flex items-center justify-between flex-shrink-0">
+              <a href="tel:+919XXXXXXXXX" className="flex items-center gap-2 text-white text-sm font-bold">
+                <Phone className="h-4 w-4 text-[#0d9488]" />
+                Emergency: +91 9XXX XXX XXX
+              </a>
+              <button onClick={() => setMobileOpen(false)} className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-            {/* Primary nav items */}
-            {primaryNav.map((item) => (
-              <div key={item.id}>
-                {item.hasDropdown ? (
-                  <>
-                    <button
-                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                      className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold rounded-xl text-[#0b1f4a] hover:bg-slate-50 transition-colors"
-                    >
-                      <span className="whitespace-nowrap">{item.name}</span>
-                      <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform flex-shrink-0", mobileServicesOpen && "rotate-180")} />
-                    </button>
+            {/* Scrollable nav */}
+            <div className="flex-1 overflow-y-auto">
+              <nav className="px-3 py-3 space-y-1">
 
-                    <div className={cn("overflow-hidden transition-all duration-300 pl-2", mobileServicesOpen ? "max-h-[600px]" : "max-h-0")}>
-                      {[
-                        { key: "allopathy", label: "Allopathy", sub: "Modern Medicine", Icon: Stethoscope, color: "text-[#0b1f4a] bg-blue-50 border-blue-100", items: allopathyServices },
-                        { key: "ayurveda", label: "Ayurveda", sub: "Traditional Healing", Icon: Leaf, color: "text-[#0d9488] bg-teal-50 border-teal-100", items: ayurvedaServices },
-                        { key: "rehab", label: "Rehabilitation", sub: "Recovery & Therapy", Icon: Activity, color: "text-[#7c3aed] bg-violet-50 border-violet-100", items: rehabServices },
-                      ].map((cat) => (
-                        <div key={cat.key} className="mb-2">
-                          <button
-                            onClick={() => setMobileCat(mobileCat === cat.key ? null : cat.key)}
-                            className={cn("flex items-center justify-between w-full px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider transition-colors", cat.color)}
-                          >
-                            <div className="flex items-center gap-2">
-                              <cat.Icon className="h-3.5 w-3.5 flex-shrink-0" />
-                              <span className="whitespace-nowrap">{cat.label}</span>
-                              <span className="font-normal normal-case tracking-normal opacity-60 whitespace-nowrap">— {cat.sub}</span>
-                            </div>
-                            <ChevronDown className={cn("h-3.5 w-3.5 transition-transform flex-shrink-0", mobileCat === cat.key && "rotate-180")} />
-                          </button>
-                          {mobileCat === cat.key && (
-                            <div className="mt-1 ml-2 bg-white rounded-xl border border-slate-100 overflow-hidden">
-                              {cat.items.map((s) => (
+                {primaryNav.map((item) => (
+                  <div key={item.id}>
+                    {item.hasDropdown ? (
+                      <>
+                        <button
+                          onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                          className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold rounded-xl text-[#0b1f4a] hover:bg-slate-50 transition-colors"
+                        >
+                          <span>{item.name}</span>
+                          <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform", mobileServicesOpen && "rotate-180")} />
+                        </button>
+
+                        {mobileServicesOpen && (
+                          <div className="pl-2 space-y-1 mt-1">
+                            {[
+                              { key: "allopathy", label: "Allopathy", Icon: Stethoscope, color: "text-[#0b1f4a] bg-blue-50 border-blue-200", items: allopathyServices },
+                              { key: "ayurveda", label: "Ayurveda", Icon: Leaf, color: "text-[#0d9488] bg-teal-50 border-teal-200", items: ayurvedaServices },
+                              { key: "rehab", label: "Rehabilitation", Icon: Activity, color: "text-[#7c3aed] bg-violet-50 border-violet-200", items: rehabServices },
+                            ].map((cat) => (
+                              <div key={cat.key}>
                                 <button
-                                  key={s.id}
-                                  onClick={() => go(s.id)}
-                                  className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50 font-medium border-b border-slate-50 last:border-0 transition-colors whitespace-nowrap"
+                                  onClick={() => setMobileCat(mobileCat === cat.key ? null : cat.key)}
+                                  className={cn("flex items-center justify-between w-full px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider", cat.color)}
                                 >
-                                  <span className="whitespace-nowrap">{s.name}</span>
+                                  <div className="flex items-center gap-2">
+                                    <cat.Icon className="h-3.5 w-3.5" />
+                                    <span>{cat.label}</span>
+                                  </div>
+                                  <ChevronDown className={cn("h-3.5 w-3.5 transition-transform", mobileCat === cat.key && "rotate-180")} />
                                 </button>
-                              ))}
-                            </div>
-                          )}
-                        </div>
+                                {mobileCat === cat.key && (
+                                  <div className="mt-1 ml-2 bg-white rounded-xl border border-slate-100 overflow-hidden">
+                                    {cat.items.map((s) => (
+                                      <button key={s.id} onClick={() => go(s.id)}
+                                        className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50 font-medium border-b border-slate-50 last:border-0 transition-colors">
+                                        {s.name}
+                                      </button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <button onClick={() => go(item.id)}
+                        className={cn(
+                          "block w-full text-left px-4 py-3 text-sm font-semibold rounded-xl transition-colors",
+                          activeSection === item.id ? "bg-[#0b1f4a] text-white" : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
+                        )}>
+                        {item.name}
+                      </button>
+                    )}
+                  </div>
+                ))}
+
+                {/* More */}
+                <div className="border-t border-slate-100 pt-1">
+                  <button
+                    onClick={() => setMobileMoreOpen(!mobileMoreOpen)}
+                    className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50 rounded-xl transition-colors"
+                  >
+                    <span>More Pages</span>
+                    <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform", mobileMoreOpen && "rotate-180")} />
+                  </button>
+                  {mobileMoreOpen && (
+                    <div className="pl-2 space-y-0.5">
+                      {secondaryNav.map((item) => (
+                        <button key={item.id} onClick={() => go(item.id)}
+                          className={cn(
+                            "block w-full text-left px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors",
+                            activeSection === item.id ? "bg-[#0b1f4a] text-white" : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
+                          )}>
+                          {item.name}
+                        </button>
                       ))}
                     </div>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => go(item.id)}
-                    className={cn(
-                      "block w-full text-left px-4 py-3 text-sm font-semibold rounded-xl transition-colors whitespace-nowrap",
-                      activeSection === item.id ? "bg-[#0b1f4a] text-white" : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
-                    )}
-                  >
-                    <span className="whitespace-nowrap">{item.name}</span>
-                  </button>
-                )}
-              </div>
-            ))}
-
-            {/* More items */}
-            <div className="pt-1 border-t border-slate-100 mt-1">
-              <button
-                onClick={() => setMobileMoreOpen(!mobileMoreOpen)}
-                className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50 rounded-xl transition-colors"
-              >
-                <span className="whitespace-nowrap">More Pages</span>
-                <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform flex-shrink-0", mobileMoreOpen && "rotate-180")} />
-              </button>
-              <div className={cn("overflow-hidden transition-all duration-300 pl-2", mobileMoreOpen ? "max-h-96" : "max-h-0")}>
-                {secondaryNav.map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => go(item.id)}
-                    className={cn(
-                      "block w-full text-left px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors whitespace-nowrap",
-                      activeSection === item.id ? "bg-[#0b1f4a] text-white" : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
-                    )}
-                  >
-                    <span className="whitespace-nowrap">{item.name}</span>
-                  </button>
-                ))}
-              </div>
+                  )}
+                </div>
+              </nav>
             </div>
 
-            {/* Mobile CTA */}
-            <div className="pt-3 pb-2">
+            {/* Book Appointment CTA */}
+            <div className="p-4 border-t border-slate-100 flex-shrink-0">
               <Button
                 onClick={() => { onBookAppointment(); setMobileOpen(false) }}
-                className="w-full bg-[#0b1f4a] hover:bg-[#1e4080] text-white font-bold py-6 rounded-xl gap-2 text-base whitespace-nowrap"
+                className="w-full bg-[#0b1f4a] hover:bg-[#1e4080] text-white font-bold h-12 rounded-xl gap-2 text-sm"
               >
-                <Calendar className="h-5 w-5 flex-shrink-0" />
-                <span className="whitespace-nowrap">Book Appointment</span>
+                <Calendar className="h-4 w-4" />
+                Book Appointment
               </Button>
             </div>
-          </nav>
+          </div>
         </div>
-      </div>
+      )}
 
     </header>
   )
