@@ -9,6 +9,5 @@ build
 .vercel
 *.zip
 pnpm-lock.yaml
-public/*.png
-public/*.jpg
+
 .env*
