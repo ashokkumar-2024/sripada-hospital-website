@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Briefcase, MapPin, Clock, Upload, CheckCircle, Sparkles, ArrowRight } from "lucide-react"
+import { Briefcase, MapPin, Clock, Upload, CheckCircle, TrendingUp, Timer, Banknote, HeartHandshake, Sparkles, ArrowRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -125,14 +125,14 @@ export function CareersSection() {
           </div>
           <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {[
-              { title: "Growth Opportunities", desc: "Continuous learning and career advancement" },
-              { title: "Work-Life Balance", desc: "Flexible schedules and leave policies" },
-              { title: "Competitive Pay", desc: "Market-leading compensation packages" },
-              { title: "Inclusive Culture", desc: "Diverse, supportive work environment" },
+              { icon: TrendingUp,    title: "Growth Opportunities", desc: "Continuous learning and career advancement" },
+              { icon: Timer,         title: "Work-Life Balance",    desc: "Flexible schedules and leave policies" },
+              { icon: Banknote,      title: "Competitive Pay",      desc: "Market-leading compensation packages" },
+              { icon: HeartHandshake, title: "Inclusive Culture",   desc: "Diverse, supportive work environment" },
             ].map((benefit, index) => (
               <div key={index} className="text-center">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="h-6 w-6 text-primary" aria-hidden="true" />
+                  <benefit.icon className="h-6 w-6 text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="font-sans font-bold text-foreground mb-1">{benefit.title}</h3>
                 <p className="text-sm text-muted-foreground">{benefit.desc}</p>

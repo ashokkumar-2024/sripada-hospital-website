@@ -1,22 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import { Clock, Shield, Heart, Users, Activity, Bed, Phone, Sparkles, ArrowRight } from "lucide-react"
+import { Clock, ShieldCheck, HeartPulse, UserCheck, BedDouble, Phone, Sparkles, ArrowRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 const emergencyFeatures = [
   { icon: Clock, title: "24/7 Availability", description: "Emergency services round the clock, 365 days" },
-  { icon: Shield, title: "Trauma Bay", description: "Fully equipped trauma resuscitation area" },
-  { icon: Users, title: "Expert Team", description: "Emergency physicians and surgeons on call" },
-  { icon: Activity, title: "Golden Hour", description: "Rapid response for critical interventions" },
+  { icon: ShieldCheck, title: "Trauma Bay", description: "Fully equipped trauma resuscitation area" },
+  { icon: UserCheck, title: "Expert Team", description: "Emergency physicians and surgeons on call" },
+  { icon: HeartPulse, title: "Golden Hour", description: "Rapid response for critical interventions" },
 ]
 
 const icuFeatures = [
-  { icon: Bed, title: "50 ICU Beds", description: "Medical, Surgical, Cardiac & Neonatal ICUs" },
-  { icon: Heart, title: "Monitoring", description: "Multi-parameter continuous monitoring" },
-  { icon: Shield, title: "Isolation", description: "Negative pressure isolation rooms" },
-  { icon: Users, title: "Intensivists", description: "Round-the-clock critical care specialists" },
+  { icon: BedDouble, title: "50 ICU Beds", description: "Medical, Surgical, Cardiac & Neonatal ICUs" },
+  { icon: HeartPulse, title: "Monitoring", description: "Multi-parameter continuous monitoring" },
+  { icon: ShieldCheck, title: "Isolation", description: "Negative pressure isolation rooms" },
+  { icon: UserCheck, title: "Intensivists", description: "Round-the-clock critical care specialists" },
 ]
 
 export function EmergencyICUSection() {
@@ -135,7 +135,7 @@ export function EmergencyICUSection() {
             <div className="max-w-5xl mx-auto">
               <div className="text-center max-w-3xl mx-auto mb-12">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-                  <Bed className="h-3 w-3" aria-hidden="true" />
+                  <BedDouble className="h-3 w-3" aria-hidden="true" />
                   ICU
                 </span>
                 <h2 className="text-2xl md:text-3xl font-sans font-bold text-foreground">

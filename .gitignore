@@ -6,3 +6,7 @@ build
 .env.local
 .DS_Store
 *.log
+.vercel
+*.zip
+pnpm-lock.yaml
+.env*

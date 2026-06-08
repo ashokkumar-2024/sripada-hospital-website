@@ -1,15 +1,12 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react"
-import { 
-  Heart, Shield, Clock, Users, Award, Stethoscope, Activity, Brain, 
-  Bone, Baby, Syringe, ChevronLeft, ChevronRight, Star, Plus, Minus,
-  UserCheck, HeartPulse, Phone, MapPin, Mail, Quote, CheckCircle, Info,
-  ArrowRight, Calendar, Sparkles
+import {
+  Heart, Shield, Clock, Users, Award, Stethoscope, Activity,
+  ChevronLeft, ChevronRight, CheckCircle, ArrowRight, Calendar,
+  Leaf, Building2, Target, Timer, ClipboardList,
+  PersonStanding, Eye, Phone, Flame, Microscope, Ambulance, Pill, Zap, Star, TrendingUp
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 
 interface HomeSectionProps {
@@ -17,580 +14,296 @@ interface HomeSectionProps {
   onBookAppointment: () => void
 }
 
+/* ─── Scroll Reveal ─── */
+function useReveal() {
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("is-visible") }),
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    )
+    document.querySelectorAll(".fade-up").forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+}
+
+/* ─── Data ─── */
 const heroSlides = [
   {
-    title: "Advanced Multi-Speciality Care Under One Roof",
-    subtitle: "Experience world-class clinical excellence integrated with compassionate care. Your health is our priority.",
+    title: "Healing, Recovery & Care Under One Roof",
+    subtitle: "A trusted destination for Allopathy, Ayurveda, and Rehabilitation services.",
     image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1920&q=80",
+    badge: "Multi-Speciality Excellence",
+    tag: "Trusted Since 2004",
   },
   {
-    title: "Allopathy, Ayurveda & Rehabilitation Combined",
-    subtitle: "Pioneering holistic recovery protocols that treat the root cause, not just symptoms.",
+    title: "Modern Medicine for Better Health Outcomes",
+    subtitle: "Advanced diagnostics, surgical specialties, and 24/7 critical care backed by experienced specialists.",
     image: "https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=1920&q=80",
+    badge: "Allopathy",
+    tag: "50+ Specialists",
   },
   {
-    title: "24/7 Emergency & Trauma Services",
-    subtitle: "State-of-the-art trauma bays and senior specialists always ready when minutes count.",
-    image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=1920&q=80",
+    title: "The Wisdom of Ayurveda, Delivered with Care",
+    subtitle: "Personalized therapies and wellness programs rooted in traditional healing principles.",
+    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1920&q=80",
+    badge: "Ayurveda",
+    tag: "Time-Tested Healing",
+  },
+  {
+    title: "Rebuild Strength. Restore Independence.",
+    subtitle: "Comprehensive rehabilitation programs to help patients regain mobility, strength, and confidence.",
+    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=1920&q=80",
+    badge: "Rehabilitation",
+    tag: "Personalised Programs",
   },
 ]
 
-const quickInfo = [
-  { icon: Users, question: "Who", answer: "A multidisciplinary team of 50+ senior doctors and medical experts.", label: "Our Experts" },
-  { icon: Stethoscope, question: "What", answer: "Comprehensive treatments spanning modern surgery, Ayurveda, and post-op rehab.", label: "Medical Care" },
-  { icon: Clock, question: "When", answer: "24/7 emergency trauma care, round-the-clock pharmacy, and OPD from 8 AM - 8 PM daily.", label: "Operations" },
-  { icon: MapPin, question: "Where", answer: "Centrally located medical complex in Hyderabad with ample parking and accessibility.", label: "Location" },
-  { icon: Heart, question: "Why", answer: "Proven patient outcomes, transparent billing, and a compassionate healing ecosystem.", label: "Why Sripada" },
-  { icon: Activity, question: "How", answer: "Personalized care pathways combining diagnostics, therapies, and regular follow-ups.", label: "Care Pathways" },
+const stats = [
+  { value: "20+",   label: "Years of Excellence",  icon: Award,       color: "#295D93" },
+  { value: "300+",  label: "Hospital Beds",          icon: Building2,   color: "#007878" },
+  { value: "50+",   label: "Senior Specialists",     icon: Stethoscope, color: "#882576" },
+  { value: "100K+", label: "Patients Treated",       icon: Heart,       color: "#295D93" },
+  { value: "24/7",  label: "Emergency Care",         icon: Zap,         color: "#007878" },
 ]
 
-const treatments = [
-  { icon: HeartPulse, name: "Cardiac Care", description: "Comprehensive diagnostics, therapy, and cardiac rehabilitation.", color: "text-primary bg-primary/10 border-primary/20" },
-  { icon: Bone, name: "Orthopaedics", description: "Advanced joint replacements, spine surgery, and sports medicine.", color: "text-accent bg-accent/10 border-accent/20" },
-  { icon: Brain, name: "Neurosciences", description: "Stroke emergency response, neuro-surgery, and nerve therapies.", color: "text-info bg-info/10 border-info/20" },
-  { icon: Syringe, name: "Panchakarma", description: "Traditional Ayurvedic detoxification and therapeutic rejuvenation.", color: "text-success bg-success/10 border-success/20" },
-  { icon: Activity, name: "Stroke Rehab", description: "Multidisciplinary physical, speech, and occupational recovery.", color: "text-primary bg-primary/10 border-primary/20" },
-  { icon: Baby, name: "Maternity Care", description: "High-risk pregnancy management and safe neonatology units.", color: "text-accent bg-accent/10 border-accent/20" },
+const pillars = [
+  {
+    icon: Stethoscope,
+    title: "Allopathy",
+    desc: "Evidence-based modern medicine — surgical care, diagnostics, emergency services, and specialist consultations.",
+    bar: "#295D93",
+    bg: "rgba(41,93,147,0.08)",
+    ic: "#295D93",
+  },
+  {
+    icon: Leaf,
+    title: "Ayurveda",
+    desc: "Holistic treatments rooted in ancient wisdom — Panchakarma, herbal therapies, and personalised wellness plans.",
+    bar: "#007878",
+    bg: "rgba(0,120,120,0.08)",
+    ic: "#007878",
+  },
+  {
+    icon: Activity,
+    title: "Rehabilitation",
+    desc: "Structured recovery programs — physiotherapy, mobility training, post-surgical care, and long-term support.",
+    bar: "#882576",
+    bg: "rgba(136,37,118,0.08)",
+    ic: "#882576",
+  },
 ]
 
-const recoveryProcess = [
-  { step: 1, title: "Consultation", description: "Comprehensive multi-specialist medical evaluation" },
-  { step: 2, title: "Diagnosis", description: "Advanced labs, digital imaging, and Prakriti analysis" },
-  { step: 3, title: "Integrated Plan", description: "Custom blend of Allopathy, Ayurveda & Rehab therapies" },
-  { step: 4, title: "Care Delivery", description: "Surgeries, medical management, or cleansing therapies" },
-  { step: 5, title: "Rehabilitation", description: "Guided physiotherapy and post-op mobility training" },
-  { step: 6, title: "Follow-up", description: "Periodic monitoring and long-term wellness checks" },
+const services = [
+  { icon: Stethoscope, name: "Medical Consultation",  c: "#295D93" },
+  { icon: Heart,       name: "Allopathic Treatment",  c: "#295D93" },
+  { icon: Leaf,        name: "Ayurvedic Therapies",   c: "#007878" },
+  { icon: Activity,    name: "Physiotherapy",          c: "#007878" },
+  { icon: Shield,      name: "Post-Surgical Care",     c: "#295D93" },
+  { icon: Flame,       name: "Pain Management",        c: "#882576" },
+  { icon: PersonStanding, name: "Strength & Mobility", c: "#882576" },
+  { icon: Eye,         name: "Wellness Guidance",      c: "#007878" },
+  { icon: Microscope,  name: "Lab & Diagnostics",      c: "#295D93" },
+  { icon: Ambulance,   name: "Emergency Care",         c: "#882576" },
+  { icon: Pill,        name: "Pharmacy",               c: "#007878" },
+  { icon: TrendingUp,  name: "Preventive Health",      c: "#295D93" },
 ]
 
-const whyChooseUs = [
-  { icon: Clock, title: "24/7 Emergency & ICU", description: "ICU intensivist on-duty 24 hours a day, 365 days a year." },
-  { icon: Users, title: "50+ Senior Specialists", description: "Consulting experts with decades of hospital experience." },
-  { icon: Shield, title: "Integrative Protocols", description: "Synergy of modern and traditional healing under one roof." },
-  { icon: Award, title: "Accredited Quality", description: "Strict NABH standards for medical safety and hygiene." },
-  { icon: Heart, title: "Compassionate Care", description: "Patient-first attitude with absolute transparency." },
+const process = [
+  { n: "01", icon: ClipboardList, title: "Assessment & Diagnosis",    desc: "Detailed evaluation of the patient's condition, medical history, and current health challenges.", col: "#295D93" },
+  { n: "02", icon: Target,        title: "Personalised Plan",         desc: "Specialists design a care plan combining medical, Ayurvedic, or rehabilitation services for individual needs.", col: "#007878" },
+  { n: "03", icon: Stethoscope,   title: "Guided Treatment",          desc: "Care delivered under experienced professionals — every session is structured for measurable progress.", col: "#882576" },
+  { n: "04", icon: TrendingUp,    title: "Progress Monitoring",       desc: "Recovery is reviewed regularly and treatment is adjusted to ensure the best possible outcomes.", col: "#007878" },
+  { n: "05", icon: PersonStanding, title: "Recovery & Wellness",      desc: "Final focus on restoring independence, mobility, and returning to daily life with lasting well-being.", col: "#295D93" },
+]
+
+const reasons = [
+  { icon: Building2, title: "Integrated Care Under One Roof",    desc: "Allopathy, Ayurveda, and Rehabilitation — all in one facility, eliminating the need for multiple providers.", col: "#295D93" },
+  { icon: Users,     title: "Experienced Specialists",           desc: "Qualified doctors, therapists, and practitioners from multiple disciplines working as one cohesive team.", col: "#007878" },
+  { icon: Target,    title: "Personalised Treatment",            desc: "Every care plan is designed around the individual — no generic protocols, just tailored healthcare.", col: "#882576" },
+  { icon: Heart,     title: "Recovery-Focused Care",             desc: "We don't just treat conditions — we help patients regain strength, mobility, and quality of life.", col: "#295D93" },
+  { icon: Timer,     title: "Continuous Support",                desc: "From first consultation through full recovery, we remain engaged at every stage of the patient journey.", col: "#007878" },
+  { icon: Shield,    title: "Patient-First Philosophy",          desc: "Professionalism, compassion, and transparency — so patients and families always feel informed and valued.", col: "#882576" },
 ]
 
 const facilities = [
-  { name: "Intensive Care Unit (ICU)", image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80" },
-  { name: "Modular Operation Theatres", image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
-  { name: "Ayurveda Panchakarma Center", image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
-  { name: "Modern Rehabilitation Gym", image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  { name: "ICU & Critical Care",    desc: "Continuous monitoring and round-the-clock specialist support.",                    img: "https://images.unsplash.com/photo-1581594693702-fbdc51b2763b?w=800&q=80" },
+  { name: "Operation Theatre",      desc: "State-of-the-art surgical suites for a full range of procedures.",                  img: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80" },
+  { name: "Emergency Ward",         desc: "Rapid triage and immediate treatment, available 24 hours a day.",                   img: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80" },
+  { name: "Patient Rooms",          desc: "Comfortable, private rooms designed for rest and safe recovery.",                   img: "https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=800&q=80" },
+  { name: "Diagnostic Centre",      desc: "On-site lab, imaging, and diagnostic services for fast, accurate results.",         img: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80" },
+  { name: "Rehabilitation Centre",  desc: "Dedicated space for physiotherapy, mobility, and strength recovery.",                img: "https://images.unsplash.com/photo-1559757175-0eb30cd8c063?w=800&q=80" },
 ]
 
-const doctors = [
-  { 
-    name: "Dr. Rajesh Kumar", 
-    specialty: "Chief Cardiologist", 
-    image: "https://i.pravatar.cc/300?img=12",
-    bio: "Dr. Rajesh Kumar is a pioneering cardiologist with 15+ years of experience. He specializes in interventional cardiology and has performed over 5,000 successful procedures. He is dedicated to patient recovery and heart health education."
-  },
-  { 
-    name: "Dr. Priya Sharma", 
-    specialty: "Senior Neurologist", 
-    image: "https://i.pravatar.cc/300?img=32",
-    bio: "Dr. Priya Sharma is a senior neurologist with expertise in stroke management and epilepsy. She holds a fellowship in neurodiagnostics and is passionate about neurorehabilitation therapies."
-  },
-  { 
-    name: "Dr. Arun Menon", 
-    specialty: "Orthopaedic Surgeon", 
-    image: "https://i.pravatar.cc/300?img=11",
-    bio: "Dr. Arun Menon is a highly skilled orthopaedic surgeon specializing in joint replacements and sports medicine. He utilizes minimally invasive techniques to ensure faster recovery times."
-  },
-  { 
-    name: "Dr. Lakshmi Nair", 
-    specialty: "Ayurveda Physician", 
-    image: "https://i.pravatar.cc/300?img=45",
-    bio: "Dr. Lakshmi Nair is an experienced Ayurvedic physician specializing in Panchakarma and lifestyle medicine. She has helped thousands of patients manage chronic conditions naturally."
-  },
-]
+/* ─── Eyebrow ─── */
+function Eyebrow({ label, light = false }: { label: string; light?: boolean }) {
+  return (
+    <span style={light
+      ? { background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)", color: "#a5d0d0" }
+      : { background: "rgba(0,120,120,0.08)", border: "1px solid rgba(0,120,120,0.2)", color: "#007878" }
+    } className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] font-bold tracking-[0.2em] uppercase">
+      <span className="w-1.5 h-1.5 rounded-full" style={{ background: light ? "#a5d0d0" : "#007878" }} />
+      {label}
+    </span>
+  )
+}
 
-const testimonials = [
-  { name: "Ramesh Patel", location: "Hyderabad", rating: 5, text: "The cardiac team saved my life. Dr. Rajesh Kumar performing the bypass surgery was a blessing. Forever grateful for their expertise and compassion." },
-  { name: "Sunita Devi", location: "Vijayawada", rating: 5, text: "Panchakarma therapy under Dr. Lakshmi transformed my health. My chronic skin condition is completely resolved. The Ayurveda department is exceptional." },
-  { name: "Vikram Singh", location: "Guntur", rating: 5, text: "After my accident, the rehabilitation team worked tirelessly. Today, I am walking again. Truly miraculous care and support." },
-]
+/* ─── Section Heading ─── */
+function SectionHeading({
+  eyebrow, title, subtitle, center = true, light = false,
+}: { eyebrow: string; title: string; subtitle?: string; center?: boolean; light?: boolean }) {
+  return (
+    <div className={cn("mb-14 fade-up", center ? "text-center mx-auto max-w-2xl" : "max-w-xl")}>
+      <Eyebrow label={eyebrow} light={light} />
+      <h2 className="mt-4 font-bold leading-tight tracking-tight text-3xl md:text-4xl" style={{ color: light ? "#ffffff" : "#1a1a2e" }}>
+        {title}
+      </h2>
+      {subtitle && (
+        <p className="mt-5 leading-relaxed text-base md:text-lg" style={{ color: light ? "rgba(255,255,255,0.8)" : "#64748b" }}>
+          {subtitle}
+        </p>
+      )}
+    </div>
+  )
+}
 
-const faqs = [
-  { question: "What are the visiting hours for inpatients?", answer: "General visiting hours are from 10:00 AM - 12:00 PM and 5:00 PM - 7:00 PM daily. ICU visiting is strictly limited to 11:00 AM and 6:00 PM for 15 minutes, with one visitor per patient." },
-  { question: "Do you accept health insurance and cashless claims?", answer: "Yes, we are empaneled with all major public and private TPA insurance providers, corporate panels, and government welfare schemes like Ayushman Bharat." },
-  { question: "How does the integrative medicine model work?", answer: "Our specialists cross-consult. For example, a post-stroke patient receives emergency Allopathic care, followed by intensive Physiotherapy and Ayurvedic therapies to speed up neurological recovery." },
-  { question: "How can I book a doctor appointment?", answer: "You can book directly by clicking 'Book Appointment', calling our reception helpline, or walking in. Online bookings receive priority confirmation codes." },
-  { question: "Are emergency and ambulance services available 24/7?", answer: "Yes, our Level-1 Trauma Center and ACLS (Advanced Cardiac Life Support) ambulances operate 24 hours a day, 7 days a week, 365 days a year." },
-]
-
-const blogs = [
-  { title: "Benefits of Integrative Medicine in Post-Stroke Recovery", date: "May 15, 2026", excerpt: "How combining neurological rehab, physical exercises, and traditional Ayurvedic oils yields faster recovery rates...", image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80" },
-  { title: "Managing Chronic Arthritis: The Ayurveda & Physio Synergy", date: "May 10, 2026", excerpt: "Discover natural anti-inflammatory protocols alongside specialized joint-strengthening routines...", image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
-]
-
-const certifications = [
-  { name: "NABH Accredited", description: "National Accreditation Board for Hospitals & Healthcare" },
-  { name: "ISO 9001:2015", description: "Certified Medical Quality Management System" },
-  { name: "NABL Certified", description: "National Accreditation Board for Testing and Calibration Laboratories" },
-  { name: "Green Hospital", description: "Eco-friendly, energy-efficient healthcare environment" },
-]
-
-const successStories = [
-  { title: "Heart Bypass Recovery", patient: "Mr. Rajan (Age 58)", story: "Underwent a complex double bypass surgery and returned to active walking within 6 weeks using cardiac rehab." },
-  { title: "Stroke Paralysis Reversal", patient: "Mrs. Kamala (Age 62)", story: "Regained 90% motor control of her right side through a 3-month physical therapy and Ayurvedic Rasayana protocol." },
-  { title: "Chronic Psoriasis Healing", patient: "Ms. Deepa (Age 35)", story: "Experienced complete remission of severe skin patches after 28 days of guided Panchakarma and herbal detox." },
-]
-
+/* ─── Main ─── */
 export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps) {
-  const [currentHeroSlide, setCurrentHeroSlide] = useState(0)
-  const [currentTestimonial, setCurrentTestimonial] = useState(0)
-  const [openFaq, setOpenFaq] = useState<number | null>(null)
-  const [openStory, setOpenStory] = useState<number | null>(null)
-  const [selectedDoctor, setSelectedDoctor] = useState<typeof doctors[0] | null>(null)
+  const [slide, setSlide] = useState(0)
+  useReveal()
 
-  // Autoplay Hero Banner
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length)
-    }, 6000)
-    return () => clearInterval(timer)
+    const t = setInterval(() => setSlide((p) => (p + 1) % heroSlides.length), 5500)
+    return () => clearInterval(t)
   }, [])
 
-  const nextHeroSlide = useCallback(() => {
-    setCurrentHeroSlide((prev) => (prev + 1) % heroSlides.length)
-  }, [])
-
-  const prevHeroSlide = useCallback(() => {
-    setCurrentHeroSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length)
-  }, [])
+  const prev = useCallback(() => setSlide((p) => (p - 1 + heroSlides.length) % heroSlides.length), [])
+  const next = useCallback(() => setSlide((p) => (p + 1) % heroSlides.length), [])
 
   return (
-    <div className="bg-medical-pattern">
-      {/* Hero Crossfade Slider - Accessible */}
-      <section className="relative h-[550px] lg:h-[650px] overflow-hidden bg-slate-950" aria-label="Hero banner">
-        {heroSlides.map((slide, index) => (
-          <div 
-            key={index} 
-            className={cn(
-              "absolute inset-0 transition-all duration-1000 ease-in-out bg-cover bg-center",
-              index === currentHeroSlide ? "opacity-100 scale-100 z-10" : "opacity-0 scale-105 z-0"
-            )}
-            style={{ backgroundImage: `url(${slide.image})` }}
-            aria-hidden={index !== currentHeroSlide}
-          >
-            {/* Gradient Overlay - Medical Teal */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/90 via-primary/65 to-transparent" />
-            
-            <div className="absolute inset-0 flex items-center">
-              <div className="container mx-auto px-4 lg:px-8">
-                <div className="max-w-2xl text-white space-y-6">
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold leading-tight text-balance drop-shadow-sm">
-                    {slide.title}
-                  </h1>
-                  <p className="text-base md:text-lg lg:text-xl text-slate-100/90 font-medium max-w-xl leading-relaxed">
-                    {slide.subtitle}
-                  </p>
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <Button 
-                      size="lg" 
-                      onClick={onBookAppointment}
-                      className="bg-success hover:bg-success/90 text-white font-semibold rounded-xl px-7 py-6 shadow-lg shadow-success/20 transition-all duration-200 hover:scale-[1.02] touch-target"
-                    >
-                      <Calendar className="mr-2 h-5 w-5" aria-hidden="true" />
-                      Book Appointment
-                    </Button>
-                    <Button 
-                      size="lg" 
-                      variant="outline" 
-                      onClick={() => onNavigate("services")}
-                      className="border-white/40 text-white hover:bg-white/10 font-semibold rounded-xl px-7 py-6 transition-all duration-200 hover:scale-[1.02] touch-target"
-                    >
-                      Our Services
-                      <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div>
+
+      {/* ══════════════════════════════════════
+          1. HERO
+      ══════════════════════════════════════ */}
+      <section className="relative overflow-hidden" style={{ height: "92vh", minHeight: 600, maxHeight: 920 }}>
+
+        {/* Slides */}
+        {heroSlides.map((s, i) => (
+          <div key={i} className={cn("absolute inset-0 transition-opacity duration-1000", i === slide ? "opacity-100 z-10" : "opacity-0 z-0")}>
+            <img src={s.image} alt={s.title} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(100deg, rgba(41,93,147,0.92) 0%, rgba(41,93,147,0.7) 40%, rgba(0,120,120,0.25) 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,20,40,0.6) 0%, transparent 60%)" }} />
           </div>
         ))}
 
-        {/* Hero Slider Controls */}
-        <button
-          onClick={prevHeroSlide}
-          className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/15 hover:bg-white/25 p-3 rounded-full text-white backdrop-blur-md transition-all duration-200 hover:scale-105 z-20 touch-target"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft className="h-6 w-6" aria-hidden="true" />
-        </button>
-        <button
-          onClick={nextHeroSlide}
-          className="absolute right-6 top-1/2 -translate-y-1/2 bg-white/15 hover:bg-white/25 p-3 rounded-full text-white backdrop-blur-md transition-all duration-200 hover:scale-105 z-20 touch-target"
-          aria-label="Next slide"
-        >
-          <ChevronRight className="h-6 w-6" aria-hidden="true" />
-        </button>
+        {/* Content */}
+        <div className="relative z-20 h-full flex items-center">
+          <div className="max-w-7xl mx-auto w-full px-6 lg:px-16">
+            <div className="max-w-[640px]">
 
-        {/* Custom Dots */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20" role="tablist" aria-label="Hero slides">
-          {heroSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentHeroSlide(index)}
-              className={cn(
-                "h-2.5 rounded-full transition-all duration-300 touch-target",
-                index === currentHeroSlide ? "w-8 bg-success" : "w-2.5 bg-white/40 hover:bg-white/60"
-              )}
-              aria-label={`Go to slide ${index + 1}`}
-              aria-selected={index === currentHeroSlide}
-              role="tab"
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* Quick Overview (5W & 1H) */}
-      <section className="py-20 bg-background border-y border-border reveal-on-scroll" aria-labelledby="quick-info-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-              <Sparkles className="h-3 w-3" aria-hidden="true" />
-              At a Glance
-            </span>
-            <h2 id="quick-info-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Hospital Quick Overview
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              Everything you need to know about Sripada Multi-Speciality Hospitals at a glance.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {quickInfo.map((item, index) => (
-              <Card key={index} className="premium-card">
-                <CardContent className="p-7">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-primary/10 p-3.5 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <item.icon className="h-6 w-6 text-primary" aria-hidden="true" />
-                    </div>
-                    <div className="space-y-1">
-                      <span className="text-xs font-bold text-primary uppercase tracking-wider">
-                        {item.question}
-                      </span>
-                      <h3 className="font-sans text-lg font-bold text-foreground">{item.label}</h3>
-                      <p className="text-muted-foreground text-sm leading-relaxed">{item.answer}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Treatment Programmes */}
-      <section className="py-20 reveal-on-scroll" aria-labelledby="treatments-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-wider mb-4">
-              <Stethoscope className="h-3 w-3" aria-hidden="true" />
-              Specializations
-            </span>
-            <h2 id="treatments-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Key Medical Programmes
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              Specialized clinical programs integrating modern medicine with physical restoration.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {treatments.map((treatment, index) => (
-              <Card 
-                key={index} 
-                className="premium-card group cursor-pointer border-l-4 border-l-transparent hover:border-l-current transition-all duration-300"
-                style={{ borderLeftColor: 'transparent' }}
-                onClick={() => onNavigate("services")}
-              >
-                <CardContent className="p-8">
-                  <div className={cn("w-14 h-14 rounded-xl flex items-center justify-center mb-6 border", treatment.color)}>
-                    <treatment.icon className="h-7 w-7" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-xl font-sans font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
-                    {treatment.name}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{treatment.description}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Button 
-              onClick={() => onNavigate("services")} 
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/5 rounded-xl font-semibold px-6 py-5 transition-all duration-200 hover:scale-[1.02] touch-target"
-            >
-              View All Services
-              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Recovery Process */}
-      <section className="py-20 bg-primary text-white relative overflow-hidden reveal-on-scroll" aria-labelledby="recovery-heading">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/15 rounded-full blur-3xl -z-10" aria-hidden="true" />
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold uppercase tracking-wider mb-4">
-              <Activity className="h-3 w-3" aria-hidden="true" />
-              Our Process
-            </span>
-            <h2 id="recovery-heading" className="text-3xl lg:text-4xl font-sans font-bold text-center">
-              Our Recovery Pathway
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 max-w-6xl mx-auto">
-            {recoveryProcess.map((step, index) => (
-              <div key={index} className="text-center bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 relative">
-                <div className="w-12 h-12 rounded-full bg-success text-white flex items-center justify-center mx-auto mb-4 font-sans font-bold text-lg shadow-md">
-                  {step.step}
-                </div>
-                <h3 className="font-sans font-bold text-base mb-2">{step.title}</h3>
-                <p className="text-xs text-white/80 leading-relaxed">{step.description}</p>
+              {/* Live badge */}
+              <div className="inline-flex items-center gap-2.5 rounded-full px-4 py-2 mb-8"
+                style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)", backdropFilter: "blur(8px)" }}>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "#a5d0d0" }} />
+                  <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#a5d0d0" }} />
+                </span>
+                <span className="text-white/90 text-xs font-semibold tracking-wide">{heroSlides[slide].badge}</span>
+                <span className="w-px h-3" style={{ background: "rgba(255,255,255,0.2)" }} />
+                <span className="text-white/50 text-xs">{heroSlides[slide].tag}</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Why Choose Us */}
-      <section className="py-20 reveal-on-scroll" aria-labelledby="why-choose-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 text-success text-xs font-bold uppercase tracking-wider mb-4">
-              <Award className="h-3 w-3" aria-hidden="true" />
-              Excellence
-            </span>
-            <h2 id="why-choose-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Clinical Excellence & Safety
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              We stand apart in quality, integration, and round-the-clock availability.
-            </p>
-          </div>
+              {/* Headline */}
+              <h1 className="font-bold text-white leading-[1.08] tracking-tight mb-5 text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+                {heroSlides[slide].title}
+              </h1>
+              <p className="leading-relaxed mb-9 max-w-[500px]" style={{ color: "rgba(255,255,255,0.72)" }}>
+                {heroSlides[slide].subtitle}
+              </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 max-w-6xl mx-auto">
-            {whyChooseUs.map((item, index) => (
-              <div key={index} className="text-center group bg-card p-6 rounded-xl border border-border/80 shadow-sm transition-all hover:shadow-md hover:border-primary/30">
-                <div className="bg-primary/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
-                  <item.icon className="h-8 w-8 text-primary" aria-hidden="true" />
-                </div>
-                <h3 className="font-sans font-bold text-base text-foreground mb-2">{item.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{item.description}</p>
+              {/* Buttons */}
+              <div className="flex flex-wrap gap-3 mb-9">
+                <button onClick={onBookAppointment}
+                  className="inline-flex items-center gap-2 font-semibold px-7 py-3.5 rounded-xl text-sm text-white transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                  style={{ background: "#007878" }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "#005c5c")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "#007878")}>
+                  <Calendar className="h-4 w-4" /> Book Appointment
+                </button>
+                <button onClick={() => onNavigate("services")}
+                  className="inline-flex items-center gap-2 font-semibold px-7 py-3.5 rounded-xl text-sm text-white transition-all hover:-translate-y-0.5"
+                  style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.22)", backdropFilter: "blur(6px)" }}>
+                  Explore Services <ArrowRight className="h-4 w-4" />
+                </button>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Facilities Grid */}
-      <section className="py-20 bg-background border-y border-border reveal-on-scroll" aria-labelledby="facility-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-info/10 text-info text-xs font-bold uppercase tracking-wider mb-4">
-              <Sparkles className="h-3 w-3" aria-hidden="true" />
-              Infrastructure
-            </span>
-            <h2 id="facility-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Modern Hospital Facilities
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              Equipped with state-of-the-art diagnostics and patient care settings.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-            {facilities.map((facility, index) => (
-              <div key={index} className="relative group overflow-hidden rounded-xl shadow-sm border border-border/50 aspect-square">
-                <img
-                  src={facility.image}
-                  alt={facility.name}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5 text-white">
-                  <h3 className="font-sans font-bold text-lg">{facility.name}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Button 
-              onClick={() => onNavigate("gallery")} 
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/5 rounded-xl font-semibold px-6 py-5 transition-all duration-200 hover:scale-[1.02] touch-target"
-            >
-              View Full Gallery
-              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Our Team */}
-      <section className="py-20 reveal-on-scroll" aria-labelledby="team-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-4">
-              <Users className="h-3 w-3" aria-hidden="true" />
-              Experts
-            </span>
-            <h2 id="team-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Meet Our Leading Specialists
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              Highly credentialed clinical leaders dedicated to your wellness.
-            </p>
-          </div>
-
-          <div className="flex gap-6 overflow-x-auto pb-8 pt-2 px-1 snap-x max-w-6xl mx-auto scrollbar-thin">
-            {doctors.map((doctor, index) => (
-              <Card 
-                key={index} 
-                className="min-w-[280px] md:min-w-[300px] max-w-[300px] flex-shrink-0 snap-start premium-card group"
-              >
-                <div className="aspect-[4/3] overflow-hidden bg-slate-100 flex items-center justify-center p-6 pb-2">
-                  <img
-                    src={doctor.image}
-                    alt={`Dr. ${doctor.name}`}
-                    loading="lazy"
-                    className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-md group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <CardContent className="p-6 text-center space-y-4">
-                  <div>
-                    <h3 className="font-sans font-bold text-lg text-foreground">{doctor.name}</h3>
-                    <p className="text-sm text-accent font-semibold mt-0.5">{doctor.specialty}</p>
-                  </div>
-                  <Button 
-                    size="sm"
-                    onClick={() => setSelectedDoctor(doctor)}
-                    className="w-full bg-primary hover:bg-primary/90 rounded-lg text-xs font-semibold py-4 touch-target"
-                  >
-                    View Profile
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center mt-6">
-            <Button 
-              onClick={() => onNavigate("about")} 
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/5 rounded-xl font-semibold px-6 py-5 transition-all duration-200 hover:scale-[1.02] touch-target"
-            >
-              View Full Medical Team
-              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Slider */}
-      <section className="py-20 bg-primary text-white relative overflow-hidden reveal-on-scroll" aria-labelledby="testimonials-heading">
-        <div className="absolute inset-0 bg-medical-pattern opacity-5" aria-hidden="true" />
-        
-        <div className="container mx-auto px-4 lg:px-8 max-w-4xl relative z-10">
-          <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold uppercase tracking-wider mb-4">
-              <Star className="h-3 w-3" aria-hidden="true" />
-              Patient Stories
-            </span>
-            <h2 id="testimonials-heading" className="text-3xl lg:text-4xl font-sans font-bold text-white">
-              Patient Stories & Reviews
-            </h2>
-          </div>
-          
-          <div className="relative bg-white/10 backdrop-blur-sm border border-white/20 p-8 md:p-12 rounded-2xl shadow-xl">
-            <Quote className="absolute top-6 right-8 h-20 w-20 text-white/10 pointer-events-none" aria-hidden="true" />
-            
-            <div className="space-y-6 text-center md:text-left">
-              <div className="flex justify-center md:justify-start gap-1" aria-label={`Rating: ${testimonials[currentTestimonial].rating} out of 5 stars`}>
-                {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 fill-success text-success" aria-hidden="true" />
+              {/* Trust chips */}
+              <div className="flex flex-wrap gap-2">
+                {["NABH Accredited", "24/7 Emergency", "50+ Specialists", "100K+ Patients"].map((t) => (
+                  <span key={t} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
+                    style={{ background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.12)", color: "rgba(255,255,255,0.7)" }}>
+                    <CheckCircle className="h-3 w-3" style={{ color: "#a5d0d0" }} />
+                    {t}
+                  </span>
                 ))}
               </div>
-              
-              <blockquote className="text-lg md:text-xl font-medium leading-relaxed text-white italic">
-                &ldquo;{testimonials[currentTestimonial].text}&rdquo;
-              </blockquote>
-              
-              <div className="pt-4 border-t border-white/20 flex flex-col md:flex-row justify-between items-center gap-4">
+            </div>
+          </div>
+        </div>
+
+        {/* Prev / Next */}
+        <button onClick={prev} aria-label="Previous"
+          className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center rounded-full text-white transition-all hover:scale-110"
+          style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)", backdropFilter: "blur(6px)" }}>
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <button onClick={next} aria-label="Next"
+          className="absolute right-4 lg:right-8 top-1/2 -translate-y-1/2 z-30 w-10 h-10 flex items-center justify-center rounded-full text-white transition-all hover:scale-110"
+          style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.18)", backdropFilter: "blur(6px)" }}>
+          <ChevronRight className="h-5 w-5" />
+        </button>
+
+        {/* Dots */}
+        <div className="absolute bottom-7 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2">
+          {heroSlides.map((_, i) => (
+            <button key={i} onClick={() => setSlide(i)} aria-label={`Slide ${i + 1}`}
+              className="rounded-full transition-all duration-300"
+              style={{ width: i === slide ? 24 : 6, height: 6, background: i === slide ? "#a5d0d0" : "rgba(255,255,255,0.3)" }} />
+          ))}
+        </div>
+
+        {/* Counter */}
+        <div className="absolute bottom-7 right-8 z-30 text-xs font-mono hidden lg:block" style={{ color: "rgba(255,255,255,0.3)" }}>
+          {String(slide + 1).padStart(2, "0")} / {String(heroSlides.length).padStart(2, "0")}
+        </div>
+
+        {/* Bottom progress line */}
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 z-30" style={{ background: "rgba(255,255,255,0.08)" }}>
+          <div className="h-full transition-all duration-300" style={{ width: `${((slide + 1) / heroSlides.length) * 100}%`, background: "#007878" }} />
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          2. STATS BAR
+      ══════════════════════════════════════ */}
+      <section className="py-16 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+            {stats.map((s, i) => (
+              <div key={i} className="fade-up group flex flex-col items-center text-center gap-4 py-8 px-4 rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1"
+                style={{ borderColor: `${s.color}22`, background: `${s.color}06` }}
+                onMouseEnter={e => { e.currentTarget.style.background = `${s.color}12`; e.currentTarget.style.borderColor = `${s.color}55` }}
+                onMouseLeave={e => { e.currentTarget.style.background = `${s.color}06`; e.currentTarget.style.borderColor = `${s.color}22` }}>
+                {/* icon */}
+                <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                  style={{ background: s.color }}>
+                  <s.icon className="h-6 w-6 text-white" />
+                </div>
+                {/* value */}
                 <div>
-                  <p className="font-sans font-bold text-lg text-white">{testimonials[currentTestimonial].name}</p>
-                  <p className="text-xs text-white/70 font-medium">{testimonials[currentTestimonial].location}</p>
-                </div>
-                
-                <span className="text-xs bg-success/25 text-success border border-success/30 px-3.5 py-1.5 rounded-full font-bold uppercase tracking-wider">
-                  {testimonials[currentTestimonial].name === "Sunita Devi" ? "Ayurveda" : testimonials[currentTestimonial].name === "Ramesh Patel" ? "Cardiology" : "Rehabilitation"}
-                </span>
-              </div>
-            </div>
-
-            <div className="flex justify-center gap-4 mt-8 md:mt-0 md:absolute md:bottom-12 md:right-12">
-              <button
-                onClick={() => setCurrentTestimonial(prev => (prev - 1 + testimonials.length) % testimonials.length)}
-                className="bg-white/15 hover:bg-white/25 p-2.5 rounded-lg text-white transition-colors touch-target"
-                aria-label="Previous review"
-              >
-                <ChevronLeft className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <button
-                onClick={() => setCurrentTestimonial(prev => (prev + 1) % testimonials.length)}
-                className="bg-white/15 hover:bg-white/25 p-2.5 rounded-lg text-white transition-colors touch-target"
-                aria-label="Next review"
-              >
-                <ChevronRight className="h-5 w-5" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQs Section */}
-      <section className="py-20 reveal-on-scroll" aria-labelledby="faq-heading">
-        <div className="container mx-auto px-4 lg:px-8 max-w-3xl">
-          <div className="text-center mb-12">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-info/10 text-info text-xs font-bold uppercase tracking-wider mb-4">
-              <Info className="h-3 w-3" aria-hidden="true" />
-              Help Center
-            </span>
-            <h2 id="faq-heading" className="text-3xl lg:text-4xl font-sans font-bold text-center text-foreground">
-              Frequently Asked Questions
-            </h2>
-          </div>
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div key={index} className="border border-border bg-card rounded-xl overflow-hidden shadow-sm transition-all hover:border-primary/40">
-                <button
-                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                  className="flex items-center justify-between w-full p-5 text-left bg-card hover:bg-muted/50 transition-colors touch-target"
-                  aria-expanded={openFaq === index}
-                  aria-controls={`faq-answer-${index}`}
-                >
-                  <span className="font-sans font-bold text-base text-foreground leading-snug pr-4">{faq.question}</span>
-                  {openFaq === index ? (
-                    <Minus className="h-5 w-5 text-primary flex-shrink-0" aria-hidden="true" />
-                  ) : (
-                    <Plus className="h-5 w-5 text-primary flex-shrink-0" aria-hidden="true" />
-                  )}
-                </button>
-                <div 
-                  id={`faq-answer-${index}`}
-                  className={cn(
-                    "overflow-hidden transition-all duration-300 ease-in-out border-t border-transparent",
-                    openFaq === index ? "max-h-[300px] border-border bg-muted/30 p-5" : "max-h-0"
-                  )}
-                >
-                  <p className="text-muted-foreground text-sm leading-relaxed">{faq.answer}</p>
+                  <p className="font-black leading-none" style={{ fontSize: 36, color: s.color }}>{s.value}</p>
+                  <p className="mt-2 font-semibold" style={{ fontSize: 13, color: "#64748b", letterSpacing: "0.02em" }}>{s.label}</p>
                 </div>
               </div>
             ))}
@@ -598,256 +311,407 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
         </div>
       </section>
 
-      {/* Blog Section */}
-      <section className="py-20 bg-background border-t border-border" aria-labelledby="blog-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-wider mb-4">
-              <Sparkles className="h-3 w-3" aria-hidden="true" />
-              Health Insights
-            </span>
-            <h2 id="blog-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Latest Health Insights & Articles
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              Read educational material authored by Sripada clinical staff.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {blogs.map((blog, index) => (
-              <Card key={index} className="premium-card group cursor-pointer" onClick={() => onNavigate("blogs")}>
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={blog.image}
-                    alt={blog.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <p className="text-xs font-bold text-accent uppercase mb-2">{blog.date}</p>
-                  <h3 className="font-sans font-bold text-lg text-foreground mb-3 group-hover:text-primary transition-colors">
-                    {blog.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{blog.excerpt}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Button 
-              onClick={() => onNavigate("blogs")} 
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary/5 rounded-xl font-semibold px-6 py-5 transition-all duration-200 hover:scale-[1.02] touch-target"
-            >
-              View All Articles
-              <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </section>
 
-      {/* Contact Quick Details */}
-      <section className="py-20 bg-primary text-white" aria-labelledby="contact-preview-heading">
-        <div className="container mx-auto px-4 lg:px-8 max-w-5xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/15 shadow-sm">
-              <div className="bg-white/15 p-3.5 rounded-xl">
-                <Phone className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs text-white/80 font-bold uppercase tracking-wider">Emergency 24/7</p>
-                <a href="tel:+919XXXXXXXXX" className="font-sans text-lg font-bold text-white hover:text-white/90 transition-colors">
-                  +91 9XXX XXX XXX
-                </a>
-              </div>
-            </div>
+      {/* ══════════════════════════════════════
+          3. THREE PILLARS
+      ══════════════════════════════════════ */}
+      <section className="py-20" style={{ background: "#f4f8fc" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+          <SectionHeading
+            eyebrow="Our Approach"
+            title="Three Pillars of Care"
+            subtitle="We integrate modern medicine, traditional Ayurveda, and structured rehabilitation — giving every patient access to the right care at the right time."
+          />
 
-            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/15 shadow-sm">
-              <div className="bg-white/15 p-3.5 rounded-xl">
-                <Mail className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs text-white/80 font-bold uppercase tracking-wider">Email Inquiry</p>
-                <a href="mailto:info@sripadahospitals.com" className="font-sans text-lg font-bold text-white hover:text-white/90 transition-colors">
-                  info@sripadahospitals.com
-                </a>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pillars.map((p, i) => (
+              <div key={i} className="fade-up group bg-white rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
+                style={{ border: `1px solid ${p.bar}22`, boxShadow: "0 2px 16px rgba(0,0,0,0.05)" }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = `0 20px 48px ${p.bar}22`)}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 2px 16px rgba(0,0,0,0.05)")}>
 
-            <div className="flex items-center gap-4 bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/15 shadow-sm">
-              <div className="bg-white/15 p-3.5 rounded-xl">
-                <MapPin className="h-6 w-6 text-white" aria-hidden="true" />
-              </div>
-              <div>
-                <p className="text-xs text-white/80 font-bold uppercase tracking-wider">Our Location</p>
-                <button onClick={() => onNavigate("contact")} className="font-sans text-lg font-bold text-white hover:text-white/90 text-left transition-colors">
-                  Hyderabad, India
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Certifications */}
-      <section className="py-16 bg-background border-t border-border" aria-labelledby="certifications-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <h2 id="certifications-heading" className="sr-only">Certifications and Accreditations</h2>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            {certifications.map((cert, index) => (
-              <div key={index} className="text-center p-4 bg-card rounded-xl border border-border/60 shadow-sm">
-                <div className="w-14 h-14 bg-gradient-to-tr from-primary to-accent rounded-full flex items-center justify-center mx-auto mb-3 shadow shadow-primary/5">
-                  <Award className="h-7 w-7 text-white" aria-hidden="true" />
-                </div>
-                <p className="font-sans font-bold text-foreground text-sm">{cert.name}</p>
-                <p className="text-xs text-muted-foreground mt-1 max-w-[200px] mx-auto leading-relaxed">{cert.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Success Stories */}
-      <section className="py-20" aria-labelledby="success-heading">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success/10 text-success text-xs font-bold uppercase tracking-wider mb-4">
-              <Heart className="h-3 w-3" aria-hidden="true" />
-              Outcomes
-            </span>
-            <h2 id="success-heading" className="text-3xl lg:text-4xl font-sans font-bold text-foreground">
-              Patient Recovery Success Stories
-            </h2>
-            <p className="text-muted-foreground mt-3 font-medium">
-              Real outcomes from our integrative treatment protocols.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {successStories.map((story, index) => (
-              <Card 
-                key={index} 
-                className="premium-card group cursor-pointer"
-                onClick={() => setOpenStory(openStory === index ? null : index)}
-              >
-                <CardContent className="p-7 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-success/10 p-2 rounded-lg">
-                      <UserCheck className="h-5 w-5 text-success" aria-hidden="true" />
-                    </div>
-                    <span className="text-xs font-bold text-muted-foreground">{story.patient}</span>
+                {/* Full-width colour banner */}
+                <div className="flex items-center gap-4 px-7 py-6" style={{ background: p.bar }}>
+                  <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                    style={{ background: "rgba(255,255,255,0.2)" }}>
+                    <p.icon className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="font-sans font-bold text-lg text-foreground group-hover:text-primary transition-colors">{story.title}</h3>
-                  <div className={cn(
-                    "overflow-hidden transition-all duration-300 ease-in-out text-sm text-muted-foreground leading-relaxed",
-                    openStory === index ? "max-h-[300px] mt-4 pt-4 border-t border-border" : "max-h-0"
-                  )}>
-                    {story.story}
-                  </div>
-                  <p className="text-xs font-bold text-primary flex items-center gap-1 group-hover:underline pt-2">
-                    {openStory === index ? "Close details" : "Read recovery story"}
-                    <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bottom CTA Block */}
-      <section className="py-24 bg-gradient-to-br from-primary to-accent text-white relative overflow-hidden" aria-labelledby="cta-heading">
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-secondary/15 rounded-full blur-3xl -z-10" aria-hidden="true" />
-        <div className="container mx-auto px-4 lg:px-8 text-center space-y-6 max-w-3xl relative z-10">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold uppercase tracking-wider">
-            <Calendar className="h-3 w-3" aria-hidden="true" />
-            Book Now
-          </span>
-          <h2 id="cta-heading" className="text-3xl lg:text-5xl font-sans font-bold leading-tight">
-            Ready to Begin Your Recovery Journey?
-          </h2>
-          <p className="text-white/90 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
-            Consult with our integrative clinical board to design a personalized treatment pathway.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 pt-4">
-            <Button 
-              size="lg" 
-              onClick={onBookAppointment} 
-              className="bg-success hover:bg-success/90 text-white font-semibold rounded-xl px-8 py-6 shadow-lg transition-all duration-200 hover:scale-[1.02] touch-target"
-            >
-              <Calendar className="mr-2 h-5 w-5" aria-hidden="true" />
-              Book Appointment
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              onClick={() => onNavigate("contact")} 
-              className="border-white/40 text-white hover:bg-white/10 font-semibold rounded-xl px-8 py-6 transition-all duration-200 hover:scale-[1.02] touch-target"
-            >
-              Contact Us
-              <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Doctor Profile Modal */}
-      <Dialog open={!!selectedDoctor} onOpenChange={(open) => !open && setSelectedDoctor(null)}>
-        <DialogContent className="sm:max-w-lg rounded-2xl overflow-hidden p-0 border-none bg-card">
-          {selectedDoctor && (
-            <div className="relative">
-              <div className="h-32 bg-gradient-to-r from-primary to-accent" aria-hidden="true" />
-              
-              <div className="px-6 pb-6 relative">
-                <div className="absolute -top-16 left-6">
-                  <img
-                    src={selectedDoctor.image}
-                    alt={selectedDoctor.name}
-                    className="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover"
-                  />
-                </div>
-                
-                <div className="pt-14 space-y-4">
                   <div>
-                    <DialogTitle className="font-sans text-2xl font-bold text-foreground">
-                      {selectedDoctor.name}
-                    </DialogTitle>
-                    <p className="text-accent font-bold text-sm">{selectedDoctor.specialty}</p>
+                    <p className="font-bold text-white" style={{ fontSize: 18 }}>{p.title}</p>
+                    <p className="font-medium" style={{ fontSize: 11, color: "rgba(255,255,255,0.7)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                      {i === 0 ? "Modern Medicine" : i === 1 ? "Traditional Healing" : "Structured Recovery"}
+                    </p>
                   </div>
-                  
-                  <div className="border-t border-border pt-4">
-                    <h4 className="font-sans font-bold text-sm text-foreground mb-1.5">Biography & Expertise</h4>
-                    <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
-                      {selectedDoctor.bio}
-                    </DialogDescription>
-                  </div>
-                  
-                  <div className="bg-muted/50 p-4 rounded-xl border border-border/60 flex items-center justify-between gap-4 mt-6">
-                    <div className="flex items-center gap-2">
-                      <div className="bg-primary/10 p-2 rounded-lg">
-                        <Heart className="h-5 w-5 text-primary" aria-hidden="true" />
+                </div>
+
+                {/* Body */}
+                <div className="px-7 py-6">
+                  <p className="leading-relaxed mb-5" style={{ color: "#64748b", fontSize: 15 }}>{p.desc}</p>
+
+                  <ul className="space-y-3 mb-6">
+                    {(i === 0
+                      ? ["Surgical & Emergency Care", "Advanced Diagnostics", "Specialist Consultations"]
+                      : i === 1
+                      ? ["Panchakarma Therapy", "Herbal & Dietary Programs", "Holistic Wellness Plans"]
+                      : ["Physiotherapy Sessions", "Mobility & Strength Training", "Post-Surgical Recovery"]
+                    ).map((feat) => (
+                      <li key={feat} className="flex items-center gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: p.bar }} />
+                        <span style={{ fontSize: 14, color: "#334155", fontWeight: 500 }}>{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <button
+                    onClick={() => onNavigate("services")}
+                    className="inline-flex items-center gap-2 font-semibold rounded-xl px-5 py-2.5 transition-all hover:-translate-y-0.5"
+                    style={{ background: p.bar, color: "#fff", fontSize: 13 }}
+                    onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+                    onMouseLeave={e => (e.currentTarget.style.opacity = "1")}>
+                    Learn More <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          4. ABOUT
+      ══════════════════════════════════════ */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+            <div className="fade-up relative pb-10 lg:pb-0">
+              <div className="grid grid-cols-2 gap-3">
+                {/* Left tall image */}
+                <div className="rounded-2xl overflow-hidden" style={{ gridRow: "span 2", aspectRatio: "3/4" }}>
+                  <img
+                    src="/Sripada Hospital.png"
+                    alt="Sripada Hospital"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Top right image */}
+                <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                  <img
+                    src="/Sripada Hospital (2).png"
+                    alt="Sripada Hospital Facility"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Bottom right — stat card */}
+                <div className="rounded-2xl overflow-hidden relative" style={{ aspectRatio: "4/3" }}>
+                  <img
+                    src="/Sripada Hospital (1).png"
+                    alt="Sripada Hospital Care"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-end p-4"
+                    style={{ background: "linear-gradient(to top, rgba(41,93,147,0.85) 0%, transparent 60%)" }}>
+                    <div className="flex items-center gap-3">
+                      <Award className="h-8 w-8 flex-shrink-0 text-white" />
+                      <div>
+                        <p className="font-black text-white leading-none" style={{ fontSize: 26 }}>20+</p>
+                        <p className="font-medium" style={{ fontSize: 11, color: "rgba(255,255,255,0.8)", lineHeight: 1.4 }}>Years of Trusted Care</p>
                       </div>
-                      <span className="text-xs font-bold text-foreground">Integrative Consult Board</span>
                     </div>
-                    <Button 
-                      size="sm" 
-                      onClick={() => {
-                        setSelectedDoctor(null)
-                        onBookAppointment()
-                      }}
-                      className="bg-primary hover:bg-primary/90 text-xs font-semibold rounded-lg touch-target"
-                    >
-                      Book Consult
-                    </Button>
                   </div>
                 </div>
               </div>
+
+              {/* Floating badge */}
+              <div className="absolute -bottom-2 left-4 lg:left-1/2 lg:-translate-x-1/2 rounded-2xl px-5 py-4 flex items-center gap-3 max-w-full"
+                style={{ background: "#007878", boxShadow: "0 12px 32px rgba(0,120,120,0.35)" }}>
+                <CheckCircle className="h-5 w-5 text-white flex-shrink-0" />
+                <div>
+                  <p className="font-bold text-white" style={{ fontSize: 13 }}>NABH Accredited</p>
+                  <p style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>Quality Certified Hospital</p>
+                </div>
+              </div>
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+
+            {/* ── Right: Content ── */}
+            <div className="fade-up">
+              <Eyebrow label="About Sripada Hospital" />
+
+              <h2 className="mt-4 font-bold leading-snug" style={{ color: "#1a1a2e", fontSize: 28 }}>
+                Comprehensive Healthcare, Delivered with Compassion
+              </h2>
+
+              <p className="mt-5 leading-relaxed" style={{ color: "#64748b", fontSize: 15 }}>
+                Sripada Hospital is a multi-speciality healthcare centre that brings Allopathy, Ayurveda, and Rehabilitation services together under one roof. We believe every patient deserves access to the right kind of care — delivered professionally, compassionately, and consistently.
+              </p>
+              <p className="mt-3 leading-relaxed" style={{ color: "#64748b", fontSize: 15 }}>
+                Our team of experienced doctors, therapists, and specialists works together to build personalised treatment plans, guide patients through recovery, and support long-term well-being.
+              </p>
+
+              {/* Divider */}
+              <div className="my-7 h-px" style={{ background: "#e8eef6" }} />
+
+              {/* 4 stats */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {[
+                  { icon: Users,     label: "Expert Team",   val: "50+ Doctors & Therapists", col: "#295D93" },
+                  { icon: Building2, label: "Facility",      val: "300+ Bed Capacity",         col: "#007878" },
+                  { icon: Zap,       label: "Availability",  val: "24 / 7 Emergency",          col: "#882576" },
+                  { icon: Award,     label: "Accreditation", val: "NABH Certified",             col: "#295D93" },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-3 rounded-xl p-3.5"
+                    style={{ background: `${item.col}08`, border: `1px solid ${item.col}18` }}>
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                      style={{ background: item.col }}>
+                      <item.icon className="h-4.5 w-4.5 text-white" style={{ height: 18, width: 18 }} />
+                    </div>
+                    <div>
+                      <p style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em" }}>{item.label}</p>
+                      <p style={{ fontSize: 13, color: "#1a1a2e", fontWeight: 700, marginTop: 1 }}>{item.val}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => onNavigate("about")}
+                className="inline-flex items-center gap-2 font-semibold text-white rounded-xl px-7 py-3.5 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                style={{ background: "#295D93", fontSize: 14 }}
+                onMouseEnter={e => (e.currentTarget.style.background = "#1e4570")}
+                onMouseLeave={e => (e.currentTarget.style.background = "#295D93")}>
+                Learn About Us <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          5. SERVICES GRID
+      ══════════════════════════════════════ */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img src="/Sripada Hospital.png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <div className="absolute inset-0" style={{ background: "rgba(41,93,147,0.88)" }} />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+          <SectionHeading
+            eyebrow="Our Services"
+            title="Comprehensive Care for Every Need"
+            subtitle="From diagnosis to rehabilitation, we offer a full spectrum of medical, Ayurvedic, and recovery services under one roof."
+            light
+          />
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4">
+            {services.map((s, i) => (
+              <button key={i} onClick={() => onNavigate("services")}
+                className="fade-up group flex flex-col items-center gap-3 p-5 rounded-2xl text-center transition-all duration-200 hover:-translate-y-0.5"
+                style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)" }}
+                onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.22)"; e.currentTarget.style.border = "1px solid rgba(255,255,255,0.35)" }}
+                onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)"; e.currentTarget.style.border = "1px solid rgba(255,255,255,0.2)" }}>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+                  style={{ background: "rgba(255,255,255,0.2)", color: "#fff" }}>
+                  <s.icon className="h-5 w-5" />
+                </div>
+                <span className="text-xs font-semibold leading-tight" style={{ color: "rgba(255,255,255,0.9)" }}>{s.name}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="text-center mt-10 fade-up">
+            <button onClick={() => onNavigate("services")}
+              className="inline-flex items-center gap-2 font-semibold px-6 py-3 rounded-xl text-sm transition-all hover:-translate-y-0.5"
+              style={{ border: "1px solid rgba(255,255,255,0.4)", color: "#fff", background: "rgba(255,255,255,0.12)" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,0.22)" }}
+              onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.12)" }}>
+              View All Services <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          6. RECOVERY PROCESS
+      ══════════════════════════════════════ */}
+      <section className="py-24" style={{ background: "#f4f8fc" }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+          <SectionHeading
+            eyebrow="How It Works"
+            title="Our 5-Step Recovery Process"
+            subtitle="A structured, patient-centred approach — from initial assessment through to full functional recovery."
+          />
+
+          <div className="relative">
+            {/* connector line */}
+            <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-px z-0"
+              style={{ background: "linear-gradient(90deg, transparent, #295D9340, #00787840, #88257640, transparent)" }} />
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+              {process.map((step, i) => (
+                <div key={i} className="fade-up flex flex-col items-center text-center group">
+                  {/* Icon circle */}
+                  <div className="relative z-10 w-20 h-20 rounded-full flex items-center justify-center mb-5 transition-transform group-hover:scale-105"
+                    style={{ background: step.col, border: "4px solid white", boxShadow: `0 8px 24px ${step.col}44` }}>
+                    <step.icon className="h-7 w-7 text-white" />
+                    {/* step number tag */}
+                    <span className="absolute -top-1 -right-1 text-[9px] font-black text-white rounded-full px-1.5 py-0.5"
+                      style={{ background: step.col, border: "2px solid white" }}>
+                      {step.n}
+                    </span>
+                  </div>
+                  <h4 className="text-sm font-bold mb-2" style={{ color: "#1a1a2e" }}>{step.title}</h4>
+                  <p className="text-xs leading-relaxed max-w-[170px]" style={{ color: "#64748b" }}>{step.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          7. WHY CHOOSE US
+      ══════════════════════════════════════ */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img src="/Sripada Hospital.png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <div className="absolute inset-0" style={{ background: "rgba(41,93,147,0.88)" }} />
+        </div>
+        {/* dot texture */}
+        <div className="absolute inset-0 opacity-[0.06]"
+          style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "26px 26px" }} />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+          <SectionHeading
+            eyebrow="Why Choose Us"
+            title="What Sets Sripada Apart"
+            subtitle="Six reasons patients and families choose Sripada Hospital for their healthcare journey."
+            light
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            {reasons.map((r, i) => (
+              <div key={i} className="fade-up group flex gap-5 rounded-2xl p-6 transition-all duration-300"
+                style={{ background: "rgba(255,255,255,0.18)", border: "1px solid rgba(255,255,255,0.25)" }}
+                onMouseEnter={e => (e.currentTarget.style.background = "rgba(255,255,255,0.26)")}
+                onMouseLeave={e => (e.currentTarget.style.background = "rgba(255,255,255,0.18)")}>
+                
+                {/* Icon */}
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110"
+                    style={{ background: "rgba(255,255,255,0.2)" }}>
+                    <r.icon className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+                
+                {/* Content */}
+                <div>
+                  <h4 className="font-bold text-white text-sm mb-2 leading-tight">{r.title}</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: "rgba(255,255,255,0.75)" }}>{r.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          8. FACILITIES
+      ══════════════════════════════════════ */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
+          <SectionHeading
+            eyebrow="Our Facility"
+            title="Built for Healing & Recovery"
+            subtitle="Purpose-designed spaces that support every stage of care — from emergency treatment to rehabilitation and long-term recovery."
+          />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {facilities.map((f, i) => (
+              <div key={i} className="fade-up group rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1"
+                style={{ border: "1px solid #e8eef6", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}
+                onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 20px 48px rgba(41,93,147,0.14)")}
+                onMouseLeave={e => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.04)")}>
+                <div className="relative overflow-hidden" style={{ aspectRatio: "16/10" }}>
+                  <img 
+                    src={f.img} 
+                    alt={f.name} 
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    onError={(e) => {
+                      console.log(`Failed to load image for ${f.name}: ${f.img}`);
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80';
+                    }}
+                  />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(41,93,147,0.7) 0%, rgba(41,93,147,0.1) 50%, transparent 100%)" }} />
+                </div>
+                <div className="p-5 bg-white">
+                  <h4 className="font-bold text-sm mb-1" style={{ color: "#1a1a2e" }}>{f.name}</h4>
+                  <p className="text-xs leading-relaxed" style={{ color: "#64748b" }}>{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ══════════════════════════════════════
+          9. CTA
+      ══════════════════════════════════════ */}
+      <section className="py-20 relative overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <img src="/Sripada Hospital (1).png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <div className="absolute inset-0" style={{ background: "rgba(0,120,120,0.82)" }} />
+        </div>
+        {/* dot texture */}
+        <div className="absolute inset-0 opacity-[0.06]"
+          style={{ backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-16 text-center fade-up">
+          {/* trust pills */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            {["NABH Accredited", "ISO Certified", "24/7 Emergency", "100K+ Patients"].map((b) => (
+              <span key={b} className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1 text-xs font-medium"
+                style={{ background: "rgba(255,255,255,0.12)", border: "1px solid rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.85)" }}>
+                <CheckCircle className="h-3 w-3 text-white" /> {b}
+              </span>
+            ))}
+          </div>
+
+          <h2 className="text-3xl md:text-[2.5rem] font-bold text-white mb-4 leading-tight">
+            Ready to Start Your Recovery?
+          </h2>
+          <p className="text-[15px] mb-9 max-w-lg mx-auto leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
+            Book an appointment today. Our team is ready to guide you towards better health and lasting well-being.
+          </p>
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button onClick={onBookAppointment}
+              className="inline-flex items-center gap-2 font-bold px-8 py-3.5 rounded-xl text-sm transition-all hover:-translate-y-0.5 hover:shadow-xl"
+              style={{ background: "#ffffff", color: "#007878" }}
+              onMouseEnter={e => (e.currentTarget.style.background = "#e0f2f2")}
+              onMouseLeave={e => (e.currentTarget.style.background = "#ffffff")}>
+              <Calendar className="h-4 w-4" /> Book Appointment
+            </button>
+            <a href="tel:+919XXXXXXXXX"
+              className="inline-flex items-center gap-2 font-semibold px-8 py-3.5 rounded-xl text-sm text-white transition-all hover:-translate-y-0.5"
+              style={{ border: "1px solid rgba(255,255,255,0.3)" }}
+              onMouseEnter={e => ((e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.1)")}
+              onMouseLeave={e => ((e.currentTarget as HTMLElement).style.background = "transparent")}>
+              <Phone className="h-4 w-4" /> Call Us Now
+            </a>
+          </div>
+        </div>
+      </section>
+
     </div>
   )
 }

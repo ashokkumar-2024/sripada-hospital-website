@@ -1,13 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { 
+import {
   Stethoscope, Leaf, Activity, Heart, Brain, Bone, Baby, Syringe,
-  Wind, Eye, Ear, Scissors, Radiation, TestTube, Pill, Ambulance,
-  CheckCircle, ChevronRight, Phone, MessageCircle, HelpCircle,
-  ArrowRight, Sparkles
+  Wind, Ear, Scissors, Radiation, TestTube2, Pill, Ambulance,
+  CheckCircle, ChevronRight, Phone, MessageCircle,
+  Zap, Clock, Shield, MapPin, Mail, Calendar,
+  Facebook, Instagram, Youtube, FlaskConical, PersonStanding,
+  Eye, ClipboardList, Flame, HelpCircle, Gem, UserCheck,
+  Microscope, Building2, HeartPulse
 } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -20,490 +22,374 @@ const serviceCategories = [
     id: "allopathy",
     name: "Allopathy",
     icon: Stethoscope,
-    color: "text-primary",
-    bgColor: "bg-primary/10",
-    borderColor: "border-primary/20",
-    description: "Evidence-based modern medical science with advanced diagnostic capabilities, surgical specialties, and critical care units."
+    accent: "from-[#0b1f4a] to-[#1a3a7c]",
+    iconColor: "text-[#0b1f4a]",
+    iconBg: "bg-blue-50",
+    border: "border-[#0b1f4a]/20",
+    tag: "bg-blue-50 text-[#0b1f4a] border-blue-100",
+    description: "Evidence-based modern medicine across 22+ specialties with 24/7 emergency, ICU support, and advanced surgical care."
   },
   {
     id: "ayurveda",
     name: "Ayurveda",
     icon: Leaf,
-    color: "text-accent",
-    bgColor: "bg-accent/10",
-    borderColor: "border-accent/20",
-    description: "Time-tested classical Indian medicine focusing on detoxification, preventative wellness, and lifestyle therapeutics."
+    accent: "from-[#0d9488] to-[#0b7c72]",
+    iconColor: "text-[#0d9488]",
+    iconBg: "bg-teal-50",
+    border: "border-[#0d9488]/20",
+    tag: "bg-teal-50 text-[#0d9488] border-teal-100",
+    description: "Traditional healing principles with personalized Panchakarma therapies, detox, rejuvenation, and lifestyle programs."
   },
   {
     id: "rehabilitation",
     name: "Rehabilitation",
     icon: Activity,
-    color: "text-success",
-    bgColor: "bg-success/10",
-    borderColor: "border-success/20",
-    description: "Comprehensive physical recovery, neurorehabilitation, speech therapies, and mobility training programs."
+    accent: "from-[#7c3aed] to-[#6d28d9]",
+    iconColor: "text-[#7c3aed]",
+    iconBg: "bg-violet-50",
+    border: "border-[#7c3aed]/20",
+    tag: "bg-violet-50 text-[#7c3aed] border-violet-100",
+    description: "Physiotherapy, neuro rehab, stroke recovery, mobility training, and post-surgical programs for complete recovery."
   },
 ]
 
-const categorySiblings = {
-  allopathy: [
-    { name: "Emergency & Trauma", id: "allopathy-emergency" },
-    { name: "ICU & Anaesthesia", id: "allopathy-icu" },
-    { name: "General Medicine", id: "allopathy-general-medicine" },
-    { name: "General Surgery", id: "allopathy-general-surgery" },
-    { name: "Gynae & OB/GYN", id: "allopathy-gynae" },
-    { name: "Gastroenterology", id: "allopathy-gastro" },
-    { name: "Vascular", id: "allopathy-vascular" },
-    { name: "Orthopaedics", id: "allopathy-ortho" },
-    { name: "Rheumatology", id: "allopathy-rheumatology" },
-    { name: "Maxillofacial", id: "allopathy-maxillofacial" },
-    { name: "Plastic Surgery", id: "allopathy-plastic" },
-    { name: "Surgical Oncology", id: "allopathy-surgical-oncology" },
-    { name: "Medical Oncology", id: "allopathy-medical-oncology" },
-    { name: "Pulmonology", id: "allopathy-pulmonology" },
-    { name: "Neurology", id: "allopathy-neuro" },
-    { name: "Urology", id: "allopathy-urology" },
-    { name: "Nephrology", id: "allopathy-nephrology" },
-    { name: "Radiology", id: "allopathy-radiology" },
-    { name: "Pediatrics", id: "allopathy-pediatrics" },
-    { name: "ENT", id: "allopathy-ent" },
-    { name: "Neurosurgery", id: "allopathy-neurosurgery" },
-    { name: "Spine Surgery", id: "allopathy-spine" },
-  ],
-  ayurveda: [
-    { name: "Panchakarma", id: "ayurveda-panchakarma" },
-    { name: "Detoxification", id: "ayurveda-detox" },
-    { name: "Skin Disease", id: "ayurveda-skin" },
-    { name: "Infertility", id: "ayurveda-infertility" },
-    { name: "Degenerative Disorders", id: "ayurveda-degenerative" },
-    { name: "Autoimmune Disorders", id: "ayurveda-autoimmune" },
-    { name: "Lifestyle Management", id: "ayurveda-lifestyle" },
-    { name: "Preventive Wellness", id: "ayurveda-preventive" },
-    { name: "Rejuvenation", id: "ayurveda-rejuvenation" },
-  ],
-  rehabilitation: [
-    { name: "Physiotherapy", id: "rehab-physio" },
-    { name: "Neurorehabilitation", id: "rehab-neuro" },
-    { name: "Orthopaedic Rehab", id: "rehab-ortho" },
-    { name: "Stroke Recovery", id: "rehab-stroke" },
-    { name: "Sports Injury", id: "rehab-sports" },
-    { name: "Mobility Training", id: "rehab-mobility" },
-    { name: "Post-Surgical Rehab", id: "rehab-post-surgical" },
-    { name: "Geriatric Care", id: "rehab-geriatric" },
-    { name: "Pain Management", id: "rehab-pain" },
-  ]
+const allopathyServices = [
+  { name: "Emergency & Trauma Care", id: "allopathy-emergency" },
+  { name: "ICU & Intensive Care", id: "allopathy-icu" },
+  { name: "General Medicine", id: "allopathy-general-medicine" },
+  { name: "General Surgery", id: "allopathy-general-surgery" },
+  { name: "Obstetrics & Gynecology", id: "allopathy-gynae" },
+  { name: "Gastroenterology", id: "allopathy-gastro" },
+  { name: "Vascular Surgery", id: "allopathy-vascular" },
+  { name: "Orthopedic Surgery", id: "allopathy-ortho" },
+  { name: "Plastic & Reconstructive Surgery", id: "allopathy-plastic" },
+  { name: "Surgical Oncology", id: "allopathy-surgical-oncology" },
+  { name: "Pulmonology", id: "allopathy-pulmonology" },
+  { name: "Neurology", id: "allopathy-neuro" },
+  { name: "Urology", id: "allopathy-urology" },
+  { name: "Nephrology", id: "allopathy-nephrology" },
+  { name: "Radiology", id: "allopathy-radiology" },
+  { name: "Pediatrics", id: "allopathy-pediatrics" },
+  { name: "ENT", id: "allopathy-ent" },
+  { name: "Neuro Surgery", id: "allopathy-neurosurgery" },
+  { name: "Spine Surgery", id: "allopathy-spine" },
+  { name: "Anaesthesia", id: "allopathy-anaesthesia" },
+  { name: "Preventive Healthcare", id: "allopathy-preventive" },
+  { name: "Internal Medicine", id: "allopathy-internal-medicine" },
+  { name: "Laparoscopic Surgery", id: "allopathy-laparoscopic" },
+  { name: "GI & Hepatobiliary Surgery", id: "allopathy-gi-hepatobiliary" },
+  { name: "Gastro Surgery", id: "allopathy-gastro-surgery" },
+  { name: "Liver & Hepatobiliary Care", id: "allopathy-liver-care" },
+  { name: "Spine Care", id: "allopathy-spine-care" },
+  { name: "Cardiology", id: "allopathy-cardiology" },
+  { name: "Laboratory Services", id: "allopathy-lab" },
+]
+
+const ayurvedaServices = [
+  { name: "Panchakarma", id: "ayurveda-panchakarma" },
+  { name: "Detoxification Therapies", id: "ayurveda-detox" },
+  { name: "Preventive Wellness", id: "ayurveda-preventive" },
+  { name: "Rejuvenation Therapies", id: "ayurveda-rejuvenation" },
+  { name: "Stress Management", id: "ayurveda-stress" },
+  { name: "Pain Relief Therapies", id: "ayurveda-pain" },
+  { name: "Spine & Joint Wellness", id: "ayurveda-spine-joint" },
+  { name: "Lifestyle Disease Management", id: "ayurveda-lifestyle" },
+  { name: "Ayurvedic Consultation", id: "ayurveda-consultation" },
+  { name: "Infertility Treatment", id: "ayurveda-infertility" },
+  { name: "Skin Disease Care", id: "ayurveda-skin" },
+  { name: "Degenerative Disorders", id: "ayurveda-degenerative" },
+  { name: "Autoimmune Disorders", id: "ayurveda-autoimmune" },
+]
+
+const rehabServices = [
+  { name: "Physiotherapy", id: "rehab-physio" },
+  { name: "Neuro Rehabilitation", id: "rehab-neuro" },
+  { name: "Orthopedic Rehabilitation", id: "rehab-ortho" },
+  { name: "Stroke Recovery", id: "rehab-stroke" },
+  { name: "Sports Injury Recovery", id: "rehab-sports" },
+  { name: "Mobility Training", id: "rehab-mobility" },
+  { name: "Post-Surgical Rehabilitation", id: "rehab-post-surgical" },
+  { name: "Elderly Rehabilitation", id: "rehab-geriatric" },
+  { name: "Pain Management Programs", id: "rehab-pain" },
+]
+
+const categorySiblings: Record<string, { name: string; id: string }[]> = {
+  allopathy: allopathyServices,
+  ayurveda: ayurvedaServices,
+  rehabilitation: rehabServices,
 }
 
 const allServices: Record<string, { title: string; description: string; icon: React.ElementType; features?: string[]; image: string }> = {
-  "allopathy-emergency": {
-    title: "Emergency & Trauma",
-    description: "Our Emergency and Trauma Department operates 24/7, providing immediate medical response led by a team of senior trauma surgeons and emergency specialists. Equipped with modern resuscitation bays, onsite diagnostic imaging, and advanced life-support ambulances, we ensure rapid intervention during critical golden hours.",
-    icon: Ambulance,
-    features: ["Level-1 Trauma Protocols", "Triage & Resuscitation Bays", "24/7 On-duty Intensivists", "Cardiac Monitor Systems"],
-    image: "https://images.unsplash.com/photo-1583307265269-eb9c0c530635?w=800&q=80"
+  "allopathy-emergency": { title: "Emergency & Trauma Care", description: "Prompt medical attention for accidents, injuries, and emergency health conditions, supported by trained healthcare professionals and emergency response systems.", icon: Ambulance, features: ["24/7 Emergency Response", "Trauma Bay Resuscitation", "ACLS Ambulance Support", "Golden Hour Protocols"], image: "https://images.unsplash.com/photo-1583307265269-eb9c0c530635?w=800&q=80" },
+  "allopathy-icu": { title: "ICU & Intensive Care", description: "Dedicated intensive care services for critically ill patients requiring continuous monitoring, advanced medical support, and specialized treatment.", icon: Heart, features: ["Advanced Ventilators", "Hemodialysis Machines", "24/7 Intensivist Care", "Infection Control Isolation"], image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80" },
+  "allopathy-general-medicine": { title: "General Medicine", description: "Comprehensive medical care for the diagnosis, treatment, and management of acute and chronic health conditions.", icon: Stethoscope, features: ["Chronic Illness Panels", "Hypertension & Diabetes OPD", "Preventative Screenings", "Geriatric Clinical Care"], image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
+  "allopathy-general-surgery": { title: "General Surgery", description: "Surgical treatment for a variety of conditions involving the abdomen, digestive system, soft tissues, and more.", icon: Scissors, features: ["Keyhole Laparoscopy", "Hernioplasty & Appendectomy", "State-of-the-art OT", "Post-op Pain Management"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-gynae": { title: "Obstetrics & Gynecology", description: "Comprehensive care for women's health, including pregnancy, childbirth, reproductive health, and gynecological conditions.", icon: Baby, features: ["High-Risk Delivery Suite", "NICU and PICU Facilities", "Laparoscopic Gyne Surgery", "Infertility Management"], image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800&q=80" },
+  "allopathy-vascular": { title: "Vascular Surgery", description: "Diagnosis and surgical treatment of diseases affecting blood vessels including arteries, veins, and the lymphatic system.", icon: HeartPulse, features: ["Varicose Vein Treatment", "Arterial Bypass Surgery", "Aneurysm Repair", "Peripheral Artery Disease Care"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-gastro": { title: "Gastroenterology", description: "Diagnosis and treatment of disorders affecting the digestive system, including the stomach, intestines, liver, and pancreas.", icon: TestTube2, features: ["Video Endoscopy & Colonoscopy", "Liver Cirrhosis Management", "IBD & GERD Therapies", "ERCP Procedures"], image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80" },
+  "allopathy-ortho": { title: "Orthopedic Surgery", description: "Diagnosis and surgical treatment of bone, joint, muscle, ligament, and sports-related injuries.", icon: Bone, features: ["Hip & Knee Replacement", "Arthroscopic Ligament Repair", "Fracture Recovery Units", "Pediatric Orthopaedics"], image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  "allopathy-plastic": { title: "Plastic & Reconstructive Surgery", description: "Procedures aimed at restoring appearance and function following injury, illness, congenital conditions, or surgery.", icon: Scissors, features: ["Reconstructive Microsurgery", "Cleft Lip Repair", "Burn Scar Revision", "Cosmetic Enhancements"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-surgical-oncology": { title: "Surgical Oncology", description: "Surgical management of cancer, focused on diagnosis, treatment, and improving patient outcomes.", icon: Radiation, features: ["Tumor Board Consultations", "Breast Conservation Surgery", "GI Tumor Resections", "Minimally Invasive Onco-Surgery"], image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80" },
+  "allopathy-pulmonology": { title: "Pulmonology", description: "Specialized care for respiratory disorders affecting the lungs and breathing function.", icon: Wind, features: ["Pulmonary Function Testing", "Polysomnography (Sleep Lab)", "Diagnostic Bronchoscopy", "Allergy Desensitization"], image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80" },
+  "allopathy-neuro": { title: "Neurology", description: "Medical management of disorders affecting the brain, spinal cord, nerves, and muscles.", icon: Brain, features: ["Thrombolysis for Stroke", "Epilepsy Management", "EEG / EMG Laboratory", "Parkinson's Clinic"], image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80" },
+  "allopathy-urology": { title: "Urology", description: "Diagnosis and treatment of conditions affecting the urinary tract and male reproductive system.", icon: TestTube2, features: ["Laser Lithotripsy (Stone)", "Prostate Laser Surgery (HoLEP)", "Uroflowmetry Testing", "Reconstructive Urology"], image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80" },
+  "allopathy-nephrology": { title: "Nephrology", description: "Expert care for kidney-related disorders, including chronic kidney disease and other renal conditions.", icon: TestTube2, features: ["24/7 Hemodialysis Unit", "Kidney Biopsy Facility", "CKD Management Programs", "Kidney Transplant Registry"], image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80" },
+  "allopathy-radiology": { title: "Radiology", description: "Advanced imaging services that assist in accurate diagnosis, treatment planning, and ongoing patient care.", icon: Radiation, features: ["Multislice CT Scanners", "Color Doppler Ultrasound", "Digital Mammography", "Interventional Radiology"], image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80" },
+  "allopathy-pediatrics": { title: "Pediatrics", description: "Medical care focused on the health, growth, and development of infants, children, and adolescents.", icon: Baby, features: ["Developmental Milestones", "Pediatric Vaccination", "Childhood Asthma Clinic", "Pediatric Emergency Box"], image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80" },
+  "allopathy-ent": { title: "ENT", description: "Evaluation and treatment of conditions affecting the ear, nose, throat, head, and neck region.", icon: Ear, features: ["Micro Ear Surgery", "FESS (Sinus Surgery)", "Audiology & Hearing Aid", "Voice Disorder Therapy"], image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80" },
+  "allopathy-neurosurgery": { title: "Neuro Surgery", description: "Advanced surgical care for conditions affecting the brain, spine, and nervous system.", icon: Brain, features: ["Micro Brain Surgery", "Spinal Cord Tumors", "Trauma Neuro Care", "Shunt Placements"], image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80" },
+  "allopathy-spine": { title: "Spine Surgery", description: "Specialized surgical treatments for spinal disorders, injuries, and conditions affecting mobility and quality of life.", icon: Bone, features: ["Microdiscectomy", "Spinal Fusion Surgery", "Disc Replacement Clinic", "Spine Decompression"], image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  "allopathy-anaesthesia": { title: "Anaesthesia", description: "Safe and effective anaesthesia services for surgical and medical procedures, managed by qualified anaesthesiology specialists.", icon: Syringe, features: ["General Anaesthesia", "Regional Anaesthesia", "Sedation Services", "Pain Control Protocols"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-preventive": { title: "Preventive Healthcare", description: "Health screenings, risk assessments, and preventive care services aimed at identifying and addressing potential health concerns early.", icon: Shield, features: ["Annual Health Checkups", "Vaccination Programs", "Lifestyle Risk Assessments", "Corporate Health Camps"], image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
+  "allopathy-internal-medicine": { title: "Internal Medicine", description: "Specialized care focused on adult health, including the prevention, diagnosis, and treatment of complex medical conditions.", icon: Stethoscope, features: ["Adult Health Management", "Complex Diagnosis", "Multi-System Disorders", "Geriatric Internal Medicine"], image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
+  "allopathy-laparoscopic": { title: "Laparoscopic Surgery", description: "Minimally invasive surgical procedures designed to reduce recovery time, discomfort, and hospital stay.", icon: Scissors, features: ["Keyhole Procedures", "Laparoscopic Cholecystectomy", "Hernia Repair", "Diagnostic Laparoscopy"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-gi-hepatobiliary": { title: "GI & Hepatobiliary Surgery", description: "Specialized surgical care for disorders affecting the gastrointestinal tract, liver, gallbladder, and biliary system.", icon: Scissors, features: ["Liver Resection", "Biliary Reconstruction", "Pancreatic Surgery", "GI Cancer Surgery"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-gastro-surgery": { title: "Gastro Surgery", description: "Specialized surgical interventions for gastrointestinal conditions requiring operative care.", icon: Scissors, features: ["Upper GI Surgery", "Colorectal Surgery", "Minimal Access Surgery", "Emergency GI Procedures"], image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80" },
+  "allopathy-liver-care": { title: "Liver & Hepatobiliary Care", description: "Evaluation and treatment of liver diseases and conditions affecting the gallbladder and biliary tract.", icon: HeartPulse, features: ["Liver Function Testing", "Hepatitis Management", "Cirrhosis Care", "Biliary Disease Treatment"], image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80" },
+  "allopathy-spine-care": { title: "Spine Care", description: "Comprehensive evaluation and treatment of spinal conditions affecting movement, posture, and daily activities.", icon: Bone, features: ["Non-Surgical Spine Care", "Spinal Injections", "Posture Correction", "Rehabilitation Programs"], image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  "allopathy-cardiology": { title: "Cardiology", description: "Diagnosis, treatment, and management of heart-related conditions with a focus on cardiovascular health.", icon: Heart, features: ["ECG & Echo Services", "Cardiac Catheterization", "Heart Failure Management", "Preventive Cardiology"], image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
+  "allopathy-lab": { title: "Laboratory Services", description: "Reliable diagnostic testing and pathology services that support informed medical decision-making and effective treatment planning.", icon: TestTube2, features: ["Clinical Pathology", "Biochemistry", "Microbiology", "Histopathology"], image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=800&q=80" },
+  "ayurveda-infertility": { title: "Infertility Treatment", description: "Ayurvedic approach to fertility care focusing on hormonal balance, reproductive health, and personalised therapies to support conception naturally.", icon: Leaf, features: ["Hormonal Balance Therapies", "Uttar Basti Treatment", "Herbal Formulations", "Lifestyle & Diet Guidance"], image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
+  "ayurveda-skin": { title: "Skin Disease Care", description: "Ayurvedic skin treatments targeting chronic conditions like psoriasis, eczema, and acne through detoxification and herbal therapies.", icon: Leaf, features: ["Raktamokshana Therapy", "Herbal Lepam Applications", "Panchakarma Detox", "Dietary & Lifestyle Plans"], image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80" },
+  "ayurveda-degenerative": { title: "Degenerative Disorders", description: "Specialised Ayurvedic care for degenerative conditions affecting joints, spine, and nerves to reduce progression and improve quality of life.", icon: Leaf, features: ["Kizhi & Pizhichil Therapies", "Nourishing Herbal Oils", "Vata Pacifying Treatments", "Neuro-Regenerative Herbs"], image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80" },
+  "ayurveda-autoimmune": { title: "Autoimmune Disorders", description: "Ayurvedic management of autoimmune conditions by modulating the immune response through detox, herbal medicines, and personalised protocols.", icon: Leaf, features: ["Immune Modulation Herbs", "Virechana Detox", "Anti-inflammatory Diet", "Rasayana Rejuvenation"], image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
+  "ayurveda-panchakarma": { title: "Panchakarma", description: "Panchakarma is a traditional Ayurvedic therapy that focuses on cleansing and revitalizing the body through specialized procedures that help remove accumulated toxins and promote overall health.", icon: Leaf, features: ["Dosha Detoxification", "Medicated Oil Enemas", "Herbal Steam Cleansing", "Personalized Prakriti Assessment"], image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80" },
+  "ayurveda-detox": { title: "Detoxification Therapies", description: "Our detoxification therapies support the body's natural cleansing processes to improve vitality, enhance well-being, and restore internal balance.", icon: Leaf, features: ["Herbal Scrubbing (Udwarthana)", "Joint Oil Pooling (Basti)", "Total Body Swedana", "Medicated Herbal Oils"], image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
+  "ayurveda-stress": { title: "Stress Management", description: "Ayurvedic stress management therapies help promote relaxation and mental well-being through personalized treatments and lifestyle recommendations.", icon: Heart, features: ["Shirodhara Therapy", "Meditation Guidance", "Herbal Calming Teas", "Lifestyle Recommendations"], image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
+  "ayurveda-pain": { title: "Pain Relief Therapies", description: "These therapies focus on relieving discomfort caused by musculoskeletal conditions, chronic pain, and lifestyle-related issues with customized treatment plans.", icon: Flame, features: ["Herbal Poultices", "Oil Pooling Therapies", "Steam Therapy", "Anti-Inflammatory Diet"], image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80" },
+  "ayurveda-spine-joint": { title: "Spine & Joint Wellness", description: "Designed to support mobility and joint health, these therapies help manage stiffness, discomfort, and movement-related concerns while promoting flexibility.", icon: Bone, features: ["Kati Basti (Back Care)", "Janu Basti (Knee Care)", "Herbal Oil Massages", "Joint Mobility Exercises"], image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80" },
+  "ayurveda-lifestyle": { title: "Lifestyle Disease Management", description: "Ayurvedic care supports management of lifestyle-related health conditions through personalized therapies, dietary recommendations, and wellness practices.", icon: Heart, features: ["Diabetes Control Protocols", "Metabolism Boosting Herbs", "Fat Loss Dry Massages", "Prakriti Wellness Audit"], image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
+  "ayurveda-preventive": { title: "Preventive Wellness", description: "Preventive wellness programs maintain health and reduce the risk of future health concerns through regular assessments, therapeutic care, and lifestyle guidance.", icon: Leaf, features: ["Seasonal Cleansing Guides", "Daily Regimen Training", "Immune Defense Herbs", "Preventative Wellness Audits"], image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
+  "ayurveda-consultation": { title: "Ayurvedic Consultation", description: "Our Ayurvedic consultations provide individualized assessments to understand a person's health profile, concerns, and wellness goals for suitable treatment plans.", icon: Stethoscope, features: ["Prakriti Analysis", "Dosha Assessment", "Personalized Diet Plans", "Treatment Recommendations"], image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80" },
+  "ayurveda-rejuvenation": { title: "Rejuvenation Therapies", description: "Rejuvenation therapies improve vitality, support overall wellness, and help individuals feel refreshed, energized, and balanced.", icon: Leaf, features: ["Kayakalpa Anti-Aging", "Memory-Boosting Tonics", "Vitality Enhancing Massages", "Longevity Consultations"], image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80" },
+  "rehab-physio": { title: "Physiotherapy", description: "Physiotherapy services help improve movement, reduce pain, and restore physical function through guided exercises, manual therapy, and personalized treatment plans.", icon: Activity, features: ["Manual Joint Mobilization", "Therapeutic Ultrasound & TENS", "Post-Op Joint Stiffness Exercises", "Kinesiology Taping Clinics"], image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80" },
+  "rehab-neuro": { title: "Neuro Rehabilitation", description: "Designed for individuals recovering from neurological conditions, neuro rehabilitation focuses on improving mobility, coordination, balance, and daily functional abilities.", icon: Brain, features: ["Neurological Gait Training", "Speech & Swallow Therapy", "Cognitive Restoration Exercises", "Balance & Coordination Devices"], image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80" },
+  "rehab-ortho": { title: "Orthopedic Rehabilitation", description: "Orthopedic rehabilitation supports recovery from bone, joint, muscle, and ligament injuries, helping patients regain strength and movement safely.", icon: Bone, features: ["Post-replacement Mobilization", "Muscular Endurance Training", "Spine Flexion Exercises", "Functional Restorations"], image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  "rehab-stroke": { title: "Stroke Recovery", description: "Our stroke rehabilitation programs help patients improve mobility, communication, balance, and daily living skills through structured therapy and ongoing support.", icon: Brain, features: ["Motor Learning Protocols", "Activities of Daily Living (ADL)", "Speech Re-education", "Spasticity Management Clinic"], image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80" },
+  "rehab-sports": { title: "Sports Injury Recovery", description: "Focused rehabilitation programs designed to help athletes and active individuals recover from sports-related injuries and safely return to their activities.", icon: Activity, features: ["Sport-Specific Drills", "Ligament Graft Rehabilitation", "Core Stability Training", "Athletic Taping Clinics"], image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  "rehab-mobility": { title: "Mobility Training", description: "Mobility training helps individuals improve movement, balance, coordination, and confidence in performing everyday activities.", icon: Activity, features: ["Wheelchair Navigation Skills", "Transfer Safety Training", "Walker & Crutch Mechanics", "Ortho Prosthetic Fitting"], image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80" },
+  "rehab-post-surgical": { title: "Post-Surgical Rehabilitation", description: "These programs support recovery after surgery by improving physical function, reducing discomfort, and promoting a safe return to daily life.", icon: Activity, features: ["Cardiac Conditioning Cycles", "Chest Physiotherapy (Spirometry)", "Early Mobility Ambulation", "Scar Tissue Management"], image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80" },
+  "rehab-geriatric": { title: "Elderly Rehabilitation", description: "Specialized rehabilitation services designed to address age-related mobility challenges, improve independence, and enhance overall quality of life.", icon: Heart, features: ["Fall Prevention Screenings", "Vestibular Balance Exercises", "Joint Range Optimization", "Elderly Endurance Drills"], image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80" },
+  "rehab-pain": { title: "Pain Management Programs", description: "Our pain management programs focus on helping patients manage chronic or recurring pain through therapy, rehabilitation techniques, and individualized care plans.", icon: Flame, features: ["TENS/Interferential Therapy", "Dry Needling Clinics", "Myofascial Trigger Release", "Posture Corrective Exercises"], image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80" },
+}
+
+const departmentGroups = [
+  {
+    category: "Emergency & Critical Care",
+    icon: Zap,
+    services: ["Emergency & Trauma Care", "ICU & Intensive Care", "Anaesthesia", "24/7 Emergency Services", "Ambulance Services"],
   },
-  "allopathy-icu": {
-    title: "ICU & Anaesthesia",
-    description: "A highly specialized clinical facility for critically ill patients requiring continuous support and multi-parameter monitoring. Our intensive care units are staffed by dedicated critical care physicians (intensivists) and trained ICU nurses. Modular design ensures high sterilization and infection control protocols.",
-    icon: Heart,
-    features: ["Advanced Ventilators", "Hemodialysis Machines", "24/7 Intensivist Care", "Infection Control Isolation"],
-    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=800&q=80"
-  },
-  "allopathy-general-medicine": {
-    title: "General Medicine",
-    description: "Provides primary diagnostic, preventative, and medical management services for acute and chronic internal illnesses. Our internal medicine experts focus on multi-system diseases, infectious fever panels, autoimmune conditions, and lifestyle disease consultations.",
+  {
+    category: "General Medicine",
     icon: Stethoscope,
-    features: ["Chronic Illness Panels", "Hypertension & Diabetes OPD", "Preventative Screenings", "Geriatric Clinical Care"],
-    image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80"
+    services: ["General Medicine", "Preventive Healthcare", "Internal Medicine"],
   },
-  "allopathy-general-surgery": {
-    title: "General Surgery",
-    description: "Offers minimally invasive laparoscopic and traditional open surgical procedures. Our surgeons specialize in gastrointestinal operations, hernia repair, gallbladder extraction, and appendectomies, utilizing advanced instrumentation for faster wound healing.",
+  {
+    category: "Surgical Sciences",
     icon: Scissors,
-    features: ["Keyhole Laparoscopy", "Hernioplasty & Appendectomy", "State-of-the-art OT", "Post-op Pain Management"],
-    image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80"
+    services: ["General Surgery", "Laparoscopic Surgery", "GI & Hepatobiliary Surgery", "Surgical Oncology", "Plastic & Reconstructive Surgery", "Neuro Surgery", "Spine Surgery", "Orthopedic Surgery", "Pediatric Surgery"],
   },
-  "allopathy-gynae": {
-    title: "Gynecology & Obstetrics",
-    description: "Comprehensive healthcare services for women across all stages of life. From routine gynecological checks and fertility evaluations to high-risk pregnancy monitoring, painless labor, and neonatal care units (NICU).",
-    icon: Baby,
-    features: ["High-Risk Delivery Suite", "NICU and PICU Facilities", "Laparoscopic Gyne Surgery", "Infertility Management"],
-    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800&q=80"
+  {
+    category: "Gastro Sciences",
+    icon: FlaskConical,
+    services: ["Gastroenterology", "Gastro Surgery", "Liver & Hepatobiliary Care"],
   },
-  "allopathy-gastro": {
-    title: "Gastroenterology",
-    description: "Dedicated diagnostics and treatment for esophageal, stomach, liver, and bowel disorders. Our modular endoscopy suite performs colonoscopies, ERCP, and therapeutic procedures for gastrointestinal bleeding.",
-    icon: TestTube,
-    features: ["Video Endoscopy & Colonoscopy", "Liver Cirrhosis Management", "IBD & GERD Therapies", "ERCP Procedures"],
-    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80"
-  },
-  "allopathy-vascular": {
-    title: "Vascular Surgery",
-    description: "Comprehensive medical and surgical solutions for arterial and venous blood vessel diseases. We specialize in varicose vein laser treatments, deep vein thrombosis (DVT) clot extractions, and diabetic foot management.",
-    icon: Heart,
-    features: ["Laser Varicose Vein Clinic", "Arterial Bypass Surgery", "DVT Compression Therapy", "Diabetic Foot Salvage"],
-    image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80"
-  },
-  "allopathy-ortho": {
-    title: "Orthopaedics",
-    description: "Orthopaedic trauma management, joint replacements, arthroscopic sports surgeries, and pediatric bone care. We utilize advanced knee and hip replacement implants combined with early mobility protocols.",
-    icon: Bone,
-    features: ["Hip & Knee Replacement", "Arthroscopic Ligament Repair", "Fracture Recovery Units", "Pediatric Orthopaedics"],
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80"
-  },
-  "allopathy-rheumatology": {
-    title: "Rheumatology",
-    description: "Specialized clinical diagnosis and management of systemic autoimmune disorders and joint conditions. Offering treatment for rheumatoid arthritis, gout, vasculitis, and lupus using biologics therapy.",
-    icon: Bone,
-    features: ["Autoimmune Diagnostics", "Biological Infusions", "Arthritis Care Clinic", "Joint Fluid Injections"],
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
-  },
-  "allopathy-maxillofacial": {
-    title: "Maxillofacial Surgery",
-    description: "Complex surgeries targeting facial trauma, jaw deformities, oral cancers, salivary gland diseases, and temporomandibular joint (TMJ) dysfunction.",
-    icon: Scissors,
-    features: ["Facial Reconstruction", "Corrective Jaw Surgery", "TMJ Pain Management", "Oral Cancer Screening"],
-    image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80"
-  },
-  "allopathy-plastic": {
-    title: "Plastic & Reconstructive",
-    description: "Aesthetic and reconstructive procedures post-burn contractures, congenital anomalies like cleft lip, microvascular surgeries, and cosmetic enhancements performed by certified plastic surgeons.",
-    icon: Scissors,
-    features: ["Reconstructive Microsurgery", "Cleft Lip Repair", "Burn Scar Revision", "Cosmetic Enhancements"],
-    image: "https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800&q=80"
-  },
-  "allopathy-surgical-oncology": {
-    title: "Surgical Oncology",
-    description: "Surgical resection of solid tumors across breast, gastrointestinal, head, and neck regions, following global oncology guidelines with organ preservation goals.",
-    icon: Radiation,
-    features: ["Tumor Board Consultations", "Breast Conservation Surgery", "GI Tumor Resections", "Minimally Invasive Onco-Surgery"],
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
-  },
-  "allopathy-medical-oncology": {
-    title: "Medical Oncology",
-    description: "Chemotherapeutic regimens, molecular targeted therapies, and modern immunotherapies administered in a sterilized day-care setting, guided by personalized cancer profiles.",
-    icon: Pill,
-    features: ["Chemotherapy Daycare", "Targeted Therapy Protocols", "Immunotherapy Access", "Palliative Care Units"],
-    image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80"
-  },
-  "allopathy-pulmonology": {
-    title: "Pulmonology",
-    description: "Clinical evaluation of chronic respiratory disorders, asthma, COPD, and sleep apnea. The department is equipped with digital spirometry, sleep labs, and diagnostic bronchoscopy.",
-    icon: Wind,
-    features: ["Pulmonary Function Testing", "Polysomnography (Sleep Lab)", "Diagnostic Bronchoscopy", "Allergy Desensitization"],
-    image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80"
-  },
-  "allopathy-neuro": {
-    title: "Neurology",
-    description: "Offers diagnostic and clinical care for strokes, neurological infections, seizures, neuropathy, and movement disorders like Parkinson's. Features EEG and EMG clinical testing.",
+  {
+    category: "Neuro Sciences",
     icon: Brain,
-    features: ["Thrombolysis for Stroke", "Epilepsy Management", "EEG / EMG Laboratory", "Parkinson's Clinic"],
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80"
+    services: ["Neurology", "Neuro Surgery", "Spine Care"],
   },
-  "allopathy-urology": {
-    title: "Urology",
-    description: "Endourological management of kidney stones, prostate hypertrophy, urinary tract infections, and male infertility utilizing advanced laser stone disintegration.",
-    icon: TestTube,
-    features: ["Laser Lithotripsy (Stone)", "Prostate Laser Surgery (HoLEP)", "Uroflowmetry Testing", "Reconstructive Urology"],
-    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80"
-  },
-  "allopathy-nephrology": {
-    title: "Nephrology",
-    description: "Comprehensive care for kidney diseases and acute renal failure. Our hospital features a 24/7 clean dialysis center offering both hemodialysis and peritoneal dialysis setups.",
-    icon: TestTube,
-    features: ["24/7 Hemodialysis Unit", "Kidney Biopsy Facility", "CKD Management Programs", "Kidney Transplant Registry"],
-    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80"
-  },
-  "allopathy-radiology": {
-    title: "Radiology",
-    description: "Advanced diagnostic imaging center offering high-resolution CT scans, digital X-rays, high-frequency ultrasounds, and MRI scanning, processed by senior radiologists.",
-    icon: Radiation,
-    features: ["Multislice CT Scanners", "Color Doppler Ultrasound", "Digital Mammography", "Interventional Radiology"],
-    image: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=800&q=80"
-  },
-  "allopathy-pediatrics": {
-    title: "Pediatrics",
-    description: "Complete pediatric services from immunizations, growth monitoring, developmental screenings, and acute pediatric medical management in a kid-friendly clinic setting.",
+  {
+    category: "Women & Child Care",
     icon: Baby,
-    features: ["Developmental Milestones", "Pediatric Vaccination", "Childhood Asthma Clinic", "Pediatric Emergency Box"],
-    image: "https://i.pravatar.cc/300?img=68"
+    services: ["Obstetrics & Gynecology", "Pediatrics", "Pediatric Surgery"],
   },
-  "allopathy-ent": {
-    title: "ENT",
-    description: "Microscopic ear surgeries, functional endoscopic sinus surgeries (FESS), throat disorder clinics, and comprehensive audiology and speech therapy services.",
+  {
+    category: "Heart & Lung Care",
+    icon: HeartPulse,
+    services: ["Cardiology", "Pulmonology"],
+  },
+  {
+    category: "Renal & Urology",
+    icon: TestTube2,
+    services: ["Nephrology", "Urology"],
+  },
+  {
+    category: "ENT & Sensory Care",
     icon: Ear,
-    features: ["Micro Ear Surgery", "FESS (Sinus Surgery)", "Audiology & Hearing Aid", "Voice Disorder Therapy"],
-    image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?w=800&q=80"
+    services: ["ENT"],
   },
-  "allopathy-neurosurgery": {
-    title: "Neurosurgery",
-    description: "Microneurosurgical procedures for brain tumors, intracranial bleeds, hydrocephalus, and spinal cord injuries using neuronavigation instrumentation.",
-    icon: Brain,
-    features: ["Micro Brain Surgery", "Spinal Cord Tumors", "Trauma Neuro Care", "Shunt Placements"],
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80"
+  {
+    category: "Diagnostics",
+    icon: Microscope,
+    services: ["Radiology", "Laboratory Services"],
   },
-  "allopathy-spine": {
-    title: "Spine Surgery",
-    description: "Advanced solutions for herniated discs, spinal stenosis, spine deformities, and spinal fusion procedures utilizing micro-decompression surgical protocols.",
-    icon: Bone,
-    features: ["Microdiscectomy", "Spinal Fusion Surgery", "Disc Replacement Clinic", "Spine Decompression"],
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80"
-  },
+]
 
-  // Ayurveda Services
-  "ayurveda-panchakarma": {
-    title: "Panchakarma",
-    description: "Authentic, five-fold classical Ayurvedic purification therapy (Vamana, Virechana, Basti, Nasya, Raktamokshana). A custom cleansing pathway designed based on personal Prakriti analysis.",
-    icon: Leaf,
-    features: ["Dosha Detoxification", "Medicated Oil Enemas", "Herbal Steam Cleansing", "Personalized Prakriti Assessment"],
-    image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80"
-  },
-  "ayurveda-detox": {
-    title: "Detoxification Therapies",
-    description: "Customized natural cleansing programs including herbal paste scrubs (Udwarthana), localized oil pools (Kati/Janu Basti), and specialized herbal steam applications to remove toxins.",
-    icon: Leaf,
-    features: ["Herbal Scrubbing (Udwarthana)", "Joint Oil Pooling (Basti)", "Total Body Swedana", "Medicated Herbal Oils"],
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80"
-  },
-  "ayurveda-skin": {
-    title: "Skin Disease Management",
-    description: "Holistic treatment of chronic skin ailments like eczema, psoriasis, acne, and allergies. Focuses on blood purification, liver wellness, and natural anti-inflammatory diets.",
-    icon: Syringe,
-    features: ["Psoriasis Management", "Blood Purifying Decoctions", "Natural Skin Packs", "Dietary Anti-Inflammatories"],
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80"
-  },
-  "ayurveda-infertility": {
-    title: "Infertility Treatment",
-    description: "Fertility enhancement therapies for couples. Includes specialized cleansing (Uttara Basti), custom herbal tonics (Rasayanas), and stress-relief yoga modules for physiological balance.",
-    icon: Baby,
-    features: ["Uttara Basti (Uterine Care)", "Rasayana Toning Herbs", "Stress Management Modules", "Sperm/Ovum Enrichment Diet"],
-    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=800&q=80"
-  },
-  "ayurveda-degenerative": {
-    title: "Degenerative Disorders",
-    description: "Effective traditional treatments for spondylosis, joint cartilage wear, osteoarthritis, and nerve weakness, promoting healing of connective tissues.",
-    icon: Bone,
-    features: ["Janu Basti (Knee Care)", "Patra Pinda Sweda", "Spinal Oil Pooling", "Cartilage Nourishing Herbs"],
-    image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80"
-  },
-  "ayurveda-autoimmune": {
-    title: "Autoimmune Disorders",
-    description: "Ayurvedic clinical approach for managing autoimmune conditions like rheumatoid arthritis and fibromyalgia. Focuses on reducing metabolic toxins (Ama) and immune modulation.",
-    icon: Activity,
-    features: ["Ama Elimination Protocols", "Immunomodulator Herbs", "Gentle Cleansing Oils", "Anti-Rheumatic Diet"],
-    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
-  },
-  "ayurveda-lifestyle": {
-    title: "Lifestyle Disease Management",
-    description: "Reversal and clinical control of diabetes, fatty liver, obesity, and hyperlipidemia using specialized diets, Prakriti exercises, and daily regimen audits.",
-    icon: Heart,
-    features: ["Diabetes Control Protocols", "Metabolism Boosting Herbs", "Fat Loss Dry Massages", "Prakriti Wellness Audit"],
-    image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80"
-  },
-  "ayurveda-preventive": {
-    title: "Preventive Wellness",
-    description: "Customized health preservation protocols based on seasonal regimes (Ritucharya) and daily routines (Dinacharya) to boost immune defense mechanisms.",
-    icon: Leaf,
-    features: ["Seasonal Cleansing Guides", "Daily Regimen Training", "Immune Defense Herbs", "Preventative Wellness Audits"],
-    image: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=800&q=80"
-  },
-  "ayurveda-rejuvenation": {
-    title: "Rejuvenation Therapies",
-    description: "Anti-aging and strength-promoting therapies using Kayakalpa protocols and premium herbal mixtures to enhance mental acuity, stamina, and longevity.",
-    icon: Leaf,
-    features: ["Kayakalpa Anti-Aging", "Memory-Boosting Tonics", "Vitality Enhancing Massages", "Longevity Consultations"],
-    image: "https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&q=80"
-  },
+const ayurvedaList = [
+  "Panchakarma", "Detoxification Therapies", "Stress Management", "Pain Relief Therapies",
+  "Spine & Joint Wellness", "Lifestyle Disease Management", "Preventive Wellness",
+  "Ayurvedic Consultation", "Rejuvenation Therapies",
+]
 
-  // Rehabilitation Services
-  "rehab-physio": {
-    title: "Physiotherapy",
-    description: "Specialized clinical rehabilitation targeting musculoskeletal pain, sports injuries, and post-operative stiffness, using modern manual manipulation and physical modalities.",
-    icon: Activity,
-    features: ["Manual Joint Mobilization", "Therapeutic Ultrasound & TENS", "Post-Op Joint Stiffness Exercises", "Kinesiology Taping Clinics"],
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80"
-  },
-  "rehab-neuro": {
-    title: "Neurorehabilitation",
-    description: "Comprehensive recovery programs for patients recovering from strokes, spinal cord injuries, or living with progressive neurological conditions like Parkinson's.",
-    icon: Brain,
-    features: ["Neurological Gait Training", "Speech & Swallow Therapy", "Cognitive Restoration Exercises", "Balance & Coordination Devices"],
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80"
-  },
-  "rehab-ortho": {
-    title: "Orthopaedic Rehabilitation",
-    description: "Structured recovery routines post-knee replacement, hip replacement, fractures, and spinal surgeries to restore joint mobility and muscular endurance.",
-    icon: Bone,
-    features: ["Post-replacement Mobilization", "Muscular Endurance Training", "Spine Flexion Exercises", "Functional Restorations"],
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80"
-  },
-  "rehab-stroke": {
-    title: "Stroke Recovery",
-    description: "A specialized multidisciplinary physical therapy, occupational therapy, and speech therapy clinic focused on helping stroke survivors regain functional autonomy.",
-    icon: Brain,
-    features: ["Motor Learning Protocols", "Activities of Daily Living (ADL)", "Speech Re-education", "Spasticity Management Clinic"],
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=800&q=80"
-  },
-  "rehab-sports": {
-    title: "Sports Injury Recovery",
-    description: "Athletic rehab targeting ligament tears (ACL/MCL), rotator cuff tears, sprains, and muscle pulls to help athletes return to play safely.",
-    icon: Activity,
-    features: ["Sport-Specific Drills", "Ligament Graft Rehabilitation", "Core Core-stability Training", "Athletic Taping Clinics"],
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80"
-  },
-  "rehab-mobility": {
-    title: "Mobility Training",
-    description: "Instruction in correct transfer mechanisms, wheelchair operations, and training with assistive technology like walkers and braces to enhance independence.",
-    icon: Activity,
-    features: ["Wheelchair Navigation Skills", "Transfer Safety Training", "Walker & Crutch Mechanics", "Ortho Prosthetic Fitting"],
-    image: "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80"
-  },
-  "rehab-post-surgical": {
-    title: "Post-Surgical Rehab",
-    description: "Phase-based exercise protocols for patients following major abdominal, thoracic, cardiac, or complex orthopaedic surgical procedures.",
-    icon: Activity,
-    features: ["Cardiac Conditioning Cycles", "Chest Physiotherapy (Spirometry)", "Early Mobility Ambulation", "Scar Tissue Management"],
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80"
-  },
-  "rehab-geriatric": {
-    title: "Geriatric Care",
-    description: "Dedicated protocols designed for elderly individuals to reduce fall risks, enhance structural balance, maintain joint flexibilities, and boost muscle tone.",
-    icon: Heart,
-    features: ["Fall Prevention Screenings", "Vestibular Balance Exercises", "Joint Range Optimization", "Elderly Endurance Drills"],
-    image: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=800&q=80"
-  },
-  "rehab-pain": {
-    title: "Pain Management",
-    description: "Drug-free, clinically proven methods for relieving chronic spinal, joint, nerve, and head pain via advanced physical therapies.",
-    icon: Activity,
-    features: ["TENS/Interferential Therapy", "Dry Needling Clinics", "Myofascial Trigger Release", "Posture Corrective Exercises"],
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80"
-  },
+const rehabList = [
+  "Physiotherapy", "Neuro Rehabilitation", "Orthopedic Rehabilitation", "Stroke Recovery",
+  "Sports Injury Recovery", "Mobility Training", "Post-Surgical Rehabilitation",
+  "Elderly Rehabilitation", "Pain Management Programs",
+]
+
+// ─── Unified Service Card ────────────────────────────────────────────────────
+function ServiceCard({ name, description }: { name: string; description?: string }) {
+  return (
+    <div className="group bg-white rounded-2xl border border-[#e8eef6] p-5 hover:-translate-y-1 hover:border-[#0b1f4a]/20 transition-all duration-300">
+      <div className="flex items-start gap-3">
+        <div className="w-2 h-2 rounded-full bg-[#0d9488] mt-2 flex-shrink-0" />
+        <div>
+          <h4 className="text-sm font-bold text-[#0b1f4a] leading-snug">{name}</h4>
+          {description && <p className="text-xs text-[#64748b] leading-relaxed mt-1">{description}</p>}
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export function ServicesSection({ activeService }: ServicesSectionProps) {
   const isOverview = activeService === "overview" || activeService === "services"
-  
   let categoryKey: "allopathy" | "ayurveda" | "rehabilitation" = "allopathy"
   if (activeService.startsWith("ayurveda-")) categoryKey = "ayurveda"
   else if (activeService.startsWith("rehab-")) categoryKey = "rehabilitation"
-  
   const service = allServices[activeService]
 
   const handleSidebarClick = (id: string) => {
     window.location.hash = id
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   if (isOverview) {
     return (
       <div>
-        {/* Hero */}
-        <section className="relative h-[320px] lg:h-[420px] bg-slate-900 overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center opacity-40 scale-100"
-            style={{ backgroundImage: "url(https://images.unsplash.com/photo-1551076805-e1869033e561?w=1920&q=80)" }}
-            aria-hidden="true"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/95 to-slate-900/60" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center text-white px-4 space-y-4">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold uppercase tracking-wider">
-                <Sparkles className="h-3 w-3" aria-hidden="true" />
-                Services
-              </span>
-              <h1 className="text-4xl md:text-5xl font-sans font-extrabold tracking-tight">Our Services</h1>
-              <p className="text-base md:text-lg text-white/90 font-medium max-w-xl mx-auto leading-relaxed">
-                Empowering wellness by combining the diagnostic precision of Allopathy, the natural healing of Ayurveda, and the restorative strength of Rehabilitation.
-              </p>
+        {/* ── Hero ── */}
+        <section className="relative h-[380px] lg:h-[460px] overflow-hidden">
+          <div className="absolute inset-0 bg-cover bg-center scale-105" style={{ backgroundImage: "url('/Sripada Hospital.png')" }} aria-hidden="true" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#060f26]/90 via-[#0b1f4a]/80 to-[#0d9488]/30" />
+          <div className="absolute inset-0 flex items-center">
+            <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+              <div className="max-w-2xl text-white">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/12 backdrop-blur-md border border-white/20 text-sm font-bold uppercase tracking-widest mb-6">
+                  <span className="w-2 h-2 rounded-full bg-[#0d9488] animate-pulse" />
+                  Our Services
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-sans font-bold leading-[1.1] tracking-tight mb-5">
+                  Healthcare That<br />
+                  <span className="text-[#0d9488]">Works for You</span>
+                </h1>
+                <p className="text-lg text-white/80 max-w-xl leading-relaxed">
+                  Allopathy, Ayurveda, and Rehabilitation — three specialties working as one to deliver complete care.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Service Categories Cards */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 lg:px-8">
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-20">
-              {serviceCategories.map((category) => (
-                <Card key={category.id} className="premium-card text-center border-t-4 border-t-primary/80">
-                  <CardContent className="p-8 space-y-4">
-                    <div className={cn("w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-2", category.bgColor)}>
-                      <category.icon className={cn("h-8 w-8", category.color)} aria-hidden="true" />
+        {/* ── Three Pillars ── */}
+        <section className="py-24 bg-white">
+          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+            <div className="text-center mb-14">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-slate-50 border border-blue-100 text-xs font-bold tracking-widest uppercase text-[#0b1f4a] mb-5">
+                Our Departments
+              </span>
+              <h2 className="text-3xl md:text-4xl font-sans font-bold text-[#0b1f4a]">Three Pillars of Integrated Care</h2>
+              <p className="text-[#475569] mt-4 text-lg max-w-2xl mx-auto">
+                Each department is designed to work in harmony — coordinated care for better outcomes.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {serviceCategories.map((cat) => (
+                <div key={cat.id} className={cn("group bg-white rounded-3xl border overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border-t-4", cat.border)}>
+                  <div className={cn("h-28 bg-gradient-to-br flex items-center justify-center", cat.accent)}>
+                    <cat.icon className="h-14 w-14 text-white/20" />
+                  </div>
+                  <div className="p-8">
+                    <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-5 -mt-14 relative z-10 border-4 border-white shadow-lg", cat.iconBg)}>
+                      <cat.icon className={cn("h-7 w-7", cat.iconColor)} />
                     </div>
-                    <h2 className={cn("text-2xl font-sans font-bold", category.color)}>{category.name}</h2>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{category.description}</p>
-                  </CardContent>
-                </Card>
+                    <h3 className="text-xl font-sans font-bold text-[#0b1f4a] mb-3">{cat.name}</h3>
+                    <p className="text-sm text-[#475569] leading-relaxed">{cat.description}</p>
+                  </div>
+                </div>
               ))}
             </div>
+          </div>
+        </section>
 
-            {/* Comprehensive Sub-Services Grids */}
-            <div className="space-y-16 max-w-6xl mx-auto">
-              {/* Allopathy */}
-              <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
-                <h2 className="text-2xl font-sans font-bold text-primary mb-6 flex items-center gap-3 pb-3 border-b">
-                  <Stethoscope className="h-6 w-6 text-primary" aria-hidden="true" />
-                  Allopathy Services
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {Object.entries(allServices)
-                    .filter(([key]) => key.startsWith("allopathy-"))
-                    .map(([key, value]) => (
-                      <button
-                        key={key}
-                        onClick={() => handleSidebarClick(key)}
-                        className="bg-background hover:bg-primary/5 border border-border rounded-xl p-4 text-center transition-all duration-300 hover:border-primary/40 hover:-translate-y-0.5 group touch-target"
-                      >
-                        <value.icon className="h-6 w-6 text-primary/70 group-hover:text-primary mx-auto mb-2.5 transition-colors" aria-hidden="true" />
-                        <p className="text-xs font-bold text-foreground leading-tight">{value.title}</p>
-                      </button>
+        {/* ── Allopathy Specialities ── */}
+        <section className="py-24 bg-[#f0f4f8]">
+          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+            <div className="text-center mb-14">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-slate-50 border border-blue-100 text-xs font-bold tracking-widest uppercase text-[#0b1f4a] mb-5">
+                Allopathy
+              </span>
+              <h2 className="text-3xl md:text-4xl font-sans font-bold text-[#0b1f4a]">Medical Specialities & Departments</h2>
+              <p className="text-[#475569] mt-4 text-lg max-w-2xl mx-auto">
+                Our team of experienced specialists covers a wide range of medical disciplines for comprehensive patient care.
+              </p>
+            </div>
+            <div className="space-y-10">
+              {departmentGroups.map((group, i) => (
+                <div key={i}>
+                  <div className="flex items-center gap-3 mb-5 pb-3 border-b border-[#e8eef6]">
+                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#0b1f4a] to-[#1a3a7c] flex items-center justify-center flex-shrink-0">
+                      <group.icon className="h-4 w-4 text-white" />
+                    </div>
+                    <h3 className="text-lg font-sans font-bold text-[#0b1f4a]">{group.category}</h3>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                    {group.services.map((name, j) => (
+                      <ServiceCard key={j} name={name} />
                     ))}
+                  </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
-              {/* Ayurveda */}
-              <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
-                <h2 className="text-2xl font-sans font-bold text-accent mb-6 flex items-center gap-3 pb-3 border-b">
-                  <Leaf className="h-6 w-6 text-accent" aria-hidden="true" />
-                  Ayurveda Services
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {Object.entries(allServices)
-                    .filter(([key]) => key.startsWith("ayurveda-"))
-                    .map(([key, value]) => (
-                      <button
-                        key={key}
-                        onClick={() => handleSidebarClick(key)}
-                        className="bg-background hover:bg-accent/5 border border-border rounded-xl p-4 text-center transition-all duration-300 hover:border-accent/40 hover:-translate-y-0.5 group touch-target"
-                      >
-                        <value.icon className="h-6 w-6 text-accent/70 group-hover:text-accent mx-auto mb-2.5 transition-colors" aria-hidden="true" />
-                        <p className="text-xs font-bold text-foreground leading-tight">{value.title}</p>
-                      </button>
-                    ))}
-                </div>
-              </div>
+        {/* ── Ayurveda ── */}
+        <section className="py-24 bg-white">
+          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+            <div className="text-center mb-14">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-50 border border-teal-100 text-xs font-bold tracking-widest uppercase text-[#0d9488] mb-5">
+                Ayurveda
+              </span>
+              <h2 className="text-3xl md:text-4xl font-sans font-bold text-[#0b1f4a]">The Wisdom of Ayurveda</h2>
+              <p className="text-[#475569] mt-4 text-lg max-w-2xl mx-auto">
+                Personalized therapies and wellness programs designed to restore balance and support the body's natural healing processes.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+              {ayurvedaList.map((name, i) => (
+                <ServiceCard key={i} name={name} />
+              ))}
+            </div>
+          </div>
+        </section>
 
-              {/* Rehabilitation */}
-              <div className="bg-card rounded-2xl border border-border p-8 shadow-sm">
-                <h2 className="text-2xl font-sans font-bold text-success mb-6 flex items-center gap-3 pb-3 border-b">
-                  <Activity className="h-6 w-6 text-success" aria-hidden="true" />
-                  Rehabilitation Services
-                </h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {Object.entries(allServices)
-                    .filter(([key]) => key.startsWith("rehab-"))
-                    .map(([key, value]) => (
-                      <button
-                        key={key}
-                        onClick={() => handleSidebarClick(key)}
-                        className="bg-background hover:bg-success/5 border border-border rounded-xl p-4 text-center transition-all duration-300 hover:border-success/40 hover:-translate-y-0.5 group touch-target"
-                      >
-                        <value.icon className="h-6 w-6 text-success/70 group-hover:text-success mx-auto mb-2.5 transition-colors" aria-hidden="true" />
-                        <p className="text-xs font-bold text-foreground leading-tight">{value.title}</p>
-                      </button>
-                    ))}
-                </div>
-              </div>
+        {/* ── Rehabilitation ── */}
+        <section className="py-24 bg-[#f0f4f8]">
+          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+            <div className="text-center mb-14">
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-xs font-bold tracking-widest uppercase text-[#7c3aed] mb-5">
+                Rehabilitation
+              </span>
+              <h2 className="text-3xl md:text-4xl font-sans font-bold text-[#0b1f4a]">Rebuild Strength. Restore Independence.</h2>
+              <p className="text-[#475569] mt-4 text-lg max-w-2xl mx-auto">
+                Tailored recovery programs for injury, illness, surgery, or neurological conditions — focused on your goals.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+              {rehabList.map((name, i) => (
+                <ServiceCard key={i} name={name} />
+              ))}
             </div>
           </div>
         </section>
@@ -511,195 +397,121 @@ export function ServicesSection({ activeService }: ServicesSectionProps) {
     )
   }
 
-  // Individual Service Detail Page
   if (service) {
-    const category = activeService.startsWith("allopathy-") 
-      ? serviceCategories[0] 
-      : activeService.startsWith("ayurveda-") 
-        ? serviceCategories[1] 
-        : serviceCategories[2]
-
+    const category = activeService.startsWith("allopathy-")
+      ? serviceCategories[0]
+      : activeService.startsWith("ayurveda-")
+      ? serviceCategories[1]
+      : serviceCategories[2]
     const siblings = categorySiblings[categoryKey] || []
 
     return (
       <div>
-        {/* Dynamic Detail Hero Banner */}
-        <section className="py-16 relative overflow-hidden bg-slate-900 border-b border-border/80">
-          <div className="absolute inset-0 bg-medical-pattern opacity-5" aria-hidden="true" />
-          <div className="container mx-auto px-4 lg:px-8 max-w-6xl relative z-10">
-            {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-6" aria-label="Breadcrumb">
-              <button onClick={() => handleSidebarClick("services")} className="hover:text-white transition-colors touch-target">Services</button>
-              <ChevronRight className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
-              <span className="font-bold text-slate-300">{category.name}</span>
-              <ChevronRight className="h-3.5 w-3.5 text-slate-500" aria-hidden="true" />
-              <span className="text-white font-bold">{service.title}</span>
-            </nav>
-            
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        {/* ── Detail Hero ── */}
+        <section className="relative h-[320px] overflow-hidden">
+          <div className="absolute inset-0 bg-cover bg-center scale-105" style={{ backgroundImage: activeService.startsWith("ayurveda-") ? "url('/Sripada Hospital (1).png')" : activeService.startsWith("rehab-") ? "url('/Sripada Hospital (2).png')" : "url('/Sripada Hospital.png')" }} aria-hidden="true" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#060f26]/90 via-[#0b1f4a]/80 to-[#0d9488]/20" />
+          <div className="absolute inset-0 flex items-center">
+            <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+              <nav className="flex items-center gap-2 text-xs font-semibold text-white/60 mb-6">
+                <button onClick={() => handleSidebarClick("services")} className="hover:text-white transition-colors">Services</button>
+                <ChevronRight className="h-3.5 w-3.5" />
+                <span className="text-white/80">{category.name}</span>
+                <ChevronRight className="h-3.5 w-3.5" />
+                <span className="text-white font-bold">{service.title}</span>
+              </nav>
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 rounded-xl flex items-center justify-center shadow-lg bg-white/10 text-white">
-                  <service.icon className="h-8 w-8" aria-hidden="true" />
+                <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg border-4 border-white/20", category.iconBg)}>
+                  <service.icon className={cn("h-7 w-7", category.iconColor)} />
                 </div>
                 <div>
-                  <h1 className="text-3xl md:text-4xl font-sans font-extrabold text-white">{service.title}</h1>
-                  <p className={cn("text-sm font-bold tracking-wider uppercase mt-1", 
-                    category.id === "allopathy" ? "text-primary" : category.id === "ayurveda" ? "text-accent" : "text-success"
-                  )}>
-                    {category.name} Department
-                  </p>
+                  <h1 className="text-3xl md:text-4xl font-sans font-bold text-white">{service.title}</h1>
+                  <span className={cn("inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full border mt-2", category.tag)}>
+                    {category.name}
+                  </span>
                 </div>
-              </div>
-
-              <div className="flex gap-3">
-                <a 
-                  href="tel:+919XXXXXXXXX"
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center gap-2 shadow-md touch-target"
-                >
-                  <Phone className="h-4 w-4" aria-hidden="true" />
-                  Call Helpline
-                </a>
-                <a 
-                  href="https://wa.me/919XXXXXXXXX?text=Hi, I want to book a consult"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-success hover:bg-success/90 text-white font-semibold text-sm px-6 py-3 rounded-xl transition-all duration-300 hover:scale-[1.02] flex items-center gap-2 shadow-md touch-target"
-                >
-                  <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                  WhatsApp Book
-                </a>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Content Layout: Sidebar + Main Content */}
-        <section className="py-16">
-          <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
+        {/* ── Detail Body ── */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
             <div className="flex flex-col lg:flex-row gap-10">
-              
-              {/* Sibling Services Navigation Sidebar */}
-              <aside className="lg:w-72 flex-shrink-0 space-y-6">
-                <Card className="border border-border/80 shadow-sm overflow-hidden">
-                  <div className="px-5 py-4 text-white font-sans font-bold text-base bg-slate-900 flex items-center gap-2">
-                    <category.icon className="h-4.5 w-4.5" aria-hidden="true" />
-                    {category.name} Services
-                  </div>
-                  <CardContent className="p-3">
-                    <nav className="space-y-1 max-h-[450px] overflow-y-auto pr-1" aria-label={`${category.name} services`}>
-                      {siblings.map((sib) => {
-                        const isCurrent = sib.id === activeService
-                        return (
-                          <button
-                            key={sib.id}
-                            onClick={() => handleSidebarClick(sib.id)}
-                            className={cn(
-                              "w-full text-left px-3.5 py-2.5 text-sm font-semibold rounded-lg transition-all flex items-center justify-between group touch-target",
-                              isCurrent 
-                                ? "bg-primary/5 text-primary border-l-4 border-l-primary" 
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                            )}
-                            aria-current={isCurrent ? "page" : undefined}
-                          >
-                            <span>{sib.name}</span>
-                            <ChevronRight className={cn(
-                              "h-4 w-4 transition-transform", 
-                              isCurrent ? "text-primary translate-x-0.5" : "text-muted-foreground/40 group-hover:translate-x-0.5"
-                            )} aria-hidden="true" />
-                          </button>
-                        )
-                      })}
-                    </nav>
-                  </CardContent>
-                </Card>
 
-                {/* FAQ Help card */}
-                <Card className="bg-gradient-to-tr from-primary/5 to-accent/5 border border-primary/10 p-6 rounded-xl space-y-4">
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="h-5 w-5 text-primary" aria-hidden="true" />
-                    <h4 className="font-sans font-bold text-sm text-foreground">Need Consultation?</h4>
+              {/* Sidebar */}
+              <aside className="lg:w-72 flex-shrink-0">
+                <div className="bg-white rounded-2xl border border-[#e8eef6] overflow-hidden shadow-sm sticky top-6">
+                  <div className={cn("px-5 py-4 text-white font-sans font-semibold text-sm bg-gradient-to-r flex items-center gap-2", category.accent)}>
+                    <category.icon className="h-4 w-4" /> {category.name} Services
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Our medical board helps coordinate treatment plans across Allopathy, Ayurveda, and Rehabilitation.
-                  </p>
-                  <button 
-                    onClick={() => handleSidebarClick("contact")}
-                    className="text-xs font-bold text-accent hover:text-primary transition-colors flex items-center gap-1 touch-target"
-                  >
-                    Contact Clinical Desk
-                    <ArrowRight className="h-3 w-3" aria-hidden="true" />
-                  </button>
-                </Card>
+                  <nav className="p-3 space-y-1 max-h-[480px] overflow-y-auto">
+                    {siblings.map((sib) => {
+                      const isCurrent = sib.id === activeService
+                      return (
+                        <button key={sib.id} onClick={() => handleSidebarClick(sib.id)}
+                          className={cn(
+                            "w-full text-left px-3.5 py-2.5 text-sm font-medium rounded-xl transition-all flex items-center justify-between group",
+                            isCurrent
+                              ? "bg-[#f0f4f8] text-[#0b1f4a] font-bold border-l-4 border-l-[#0b1f4a]"
+                              : "text-[#64748b] hover:text-[#0b1f4a] hover:bg-[#f8fafc]"
+                          )}
+                        >
+                          <span>{sib.name}</span>
+                          <ChevronRight className={cn("h-3.5 w-3.5 flex-shrink-0", isCurrent ? "text-[#0b1f4a]" : "text-[#cbd5e1]")} />
+                        </button>
+                      )
+                    })}
+                  </nav>
+                </div>
               </aside>
 
-              {/* Main Content Area */}
-              <div className="flex-1 space-y-10">
-                {/* Visual Image Banner & Detail Description */}
-                <div className="space-y-6">
-                  <div className="aspect-[21/9] w-full rounded-2xl overflow-hidden border border-border shadow-sm">
-                    <img 
-                      src={service.image} 
-                      alt={service.title} 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h2 className="text-2xl font-sans font-bold text-foreground">Overview</h2>
-                    <p className="text-muted-foreground leading-relaxed text-base">
-                      {service.description}
-                    </p>
-                  </div>
+              {/* Main content */}
+              <div className="flex-1 space-y-8">
+                {/* Description */}
+                <div className="bg-white rounded-2xl border border-[#e8eef6] p-8">
+                  <h2 className="text-xl font-sans font-bold text-[#0b1f4a] mb-4">Overview</h2>
+                  <p className="text-[#475569] leading-relaxed text-base">{service.description}</p>
                 </div>
 
-                {/* Key Features/Points bullet grid */}
+                {/* Features */}
                 {service.features && (
-                  <div className="space-y-5 bg-background p-6 rounded-2xl border border-border">
-                    <h3 className="text-lg font-sans font-bold text-foreground">Department Key Capabilities</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-[#f0f4f8] rounded-2xl border border-[#e8eef6] p-8">
+                    <h3 className="text-lg font-sans font-bold text-[#0b1f4a] mb-6">Key Capabilities</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {service.features.map((feature, i) => (
-                        <div key={i} className="flex items-start gap-2.5">
-                          <CheckCircle className="h-5 w-5 text-success flex-shrink-0 mt-0.5" aria-hidden="true" />
-                          <span className="text-sm font-semibold text-foreground">{feature}</span>
+                        <div key={i} className="bg-white rounded-xl border border-[#e8eef6] px-5 py-4 flex items-center gap-3">
+                          <CheckCircle className="h-5 w-5 text-[#0d9488] flex-shrink-0" />
+                          <span className="text-sm font-semibold text-[#0b1f4a]">{feature}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 )}
 
-                {/* Consultation Booking CTA Card */}
-                <Card className="border border-border/80 shadow-md rounded-2xl bg-card overflow-hidden">
-                  <div className="bg-gradient-to-r from-primary to-accent p-1" aria-hidden="true" />
-                  <CardContent className="p-8 space-y-6">
-                    <div className="space-y-2">
-                      <h3 className="text-xl font-sans font-bold text-foreground">Schedule a Consultation</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        Consult with our experienced physicians and specialists today. We provide transparent advice and coordinated clinical timelines.
-                      </p>
+                {/* CTA */}
+                <div className="bg-white rounded-2xl border border-[#e8eef6] p-8">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0b1f4a] to-[#1a3a7c] flex items-center justify-center flex-shrink-0">
+                      <Phone className="h-5 w-5 text-white" />
                     </div>
-
-                    <div className="flex flex-wrap gap-4 pt-2">
-                      <a 
-                        href="tel:+919XXXXXXXXX"
-                        className="bg-primary hover:bg-primary/95 text-white font-semibold text-sm px-6 py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center gap-2 shadow-md touch-target"
-                      >
-                        <Phone className="h-4 w-4" aria-hidden="true" />
-                        Call Medical Desk
-                      </a>
-                      <a 
-                        href="https://wa.me/919XXXXXXXXX?text=Hi,%20I%20want%20to%20schedule%20an%20appointment%20for%20"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-accent hover:bg-accent/95 text-white font-semibold text-sm px-6 py-4 rounded-xl transition-all duration-300 hover:scale-[1.02] inline-flex items-center gap-2 shadow-md touch-target"
-                      >
-                        <MessageCircle className="h-4 w-4" aria-hidden="true" />
-                        Inquire via WhatsApp
-                      </a>
+                    <div>
+                      <h3 className="text-lg font-sans font-bold text-[#0b1f4a]">Schedule a Consultation</h3>
+                      <p className="text-sm text-[#475569] mt-1">Connect with our specialists to discuss your care options.</p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <a href="tel:+919XXXXXXXXX" className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0b1f4a] to-[#1a3a7c] text-white font-semibold text-sm px-6 py-3.5 rounded-xl hover:opacity-90 hover:scale-[1.02] transition-all shadow-md">
+                      <Phone className="h-4 w-4" /> Call Medical Desk
+                    </a>
+                    <a href="https://wa.me/919XXXXXXXXX?text=Hi,%20I%20want%20to%20schedule%20an%20appointment" target="_blank" rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0d9488] to-[#0b7c72] text-white font-semibold text-sm px-6 py-3.5 rounded-xl hover:opacity-90 hover:scale-[1.02] transition-all shadow-md">
+                      <MessageCircle className="h-4 w-4" /> WhatsApp Us
+                    </a>
+                  </div>
+                </div>
               </div>
-
             </div>
           </div>
         </section>

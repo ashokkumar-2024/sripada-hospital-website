@@ -1,17 +1,17 @@
 "use client"
 
-import { Phone, Ambulance, Clock, MapPin, Shield, Heart, Sparkles, ArrowRight } from "lucide-react"
+import { Phone, Ambulance, Clock, MapPin, ShieldCheck, HeartHandshake, Sparkles, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 const ambulanceFeatures = [
   {
-    icon: Shield,
+    icon: ShieldCheck,
     title: "ACLS Equipped",
     description: "Advanced Cardiac Life Support with defibrillators, ventilators, and cardiac monitors"
   },
   {
-    icon: Heart,
+    icon: HeartHandshake,
     title: "Trained Paramedics",
     description: "Critical care paramedics and EMTs trained in emergency response"
   },

@@ -1,0 +1,31 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="6" fill="#2563EB"/>
+  
+  <!-- Simplified stethoscope for small size -->
+  <g transform="translate(16,16)">
+    <!-- Main tube -->
+    <path d="M-6,-4 Q-6,-6 -4,-6 L4,-6 Q6,-6 6,-4 L6,3 Q6,5 4,5 L3,5" 
+          stroke="white" stroke-width="1.5" fill="none"/>
+    
+    <!-- Left earpiece -->
+    <circle cx="-4" cy="-6" r="1" fill="white"/>
+    
+    <!-- Right earpiece -->  
+    <circle cx="4" cy="-6" r="1" fill="white"/>
+    
+    <!-- Chest piece -->
+    <circle cx="3" cy="5" r="2.5" fill="#0D9488"/>
+    <circle cx="3" cy="5" r="1.5" fill="#2563EB"/>
+    
+    <!-- Small connecting tube -->
+    <rect x="2.5" y="5" width="1" height="2.5" fill="white"/>
+    
+    <!-- Diaphragm -->
+    <circle cx="3" cy="8" r="1.5" fill="white"/>
+    <circle cx="3" cy="8" r="1" fill="#2563EB"/>
+    
+    <!-- Medical cross -->
+    <rect x="2.5" y="7.5" width="1" height="0.5" fill="#0D9488"/>
+    <rect x="2.75" y="7.25" width="0.5" height="1" fill="#0D9488"/>
+  </g>
+</svg>

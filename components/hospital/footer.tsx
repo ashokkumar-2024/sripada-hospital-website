@@ -1,183 +1,217 @@
 "use client"
 
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Youtube, Award, ShieldCheck, Heart, ArrowRight } from "lucide-react"
+import {
+  Phone, Mail, MapPin, Clock, Facebook, Instagram, Youtube, MessageCircle,
+  Heart, Stethoscope, ArrowRight, Calendar
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 interface FooterProps {
   onNavigate: (section: string) => void
 }
 
+const quickLinks = [
+  { name: "Home", id: "home" },
+  { name: "About Us", id: "about" },
+  { name: "Services", id: "services" },
+  { name: "Facilities", id: "gallery" },
+  { name: "Contact", id: "contact" },
+]
+
+const departments = [
+  { name: "Allopathy", id: "services" },
+  { name: "Ayurveda", id: "services" },
+  { name: "Rehabilitation", id: "services" },
+  { name: "Emergency Care", id: "emergency-icu" },
+  { name: "Lab & Pharmacy", id: "lab-pharmacy" },
+]
+
+const supportLinks = [
+  { name: "Privacy Policy", id: "policies" },
+  { name: "Terms & Conditions", id: "policies" },
+  { name: "Health Guidelines", id: "policies" },
+  { name: "Careers", id: "careers" },
+]
+
 export function Footer({ onNavigate }: FooterProps) {
-  const quickLinks = [
-    { name: "Home", id: "home" },
-    { name: "About Us", id: "about" },
-    { name: "Services", id: "services" },
-    { name: "Testimonials", id: "testimonials" },
-    { name: "Gallery", id: "gallery" },
-    { name: "Careers", id: "careers" },
-    { name: "Contact", id: "contact" },
-  ]
-
-  const services = [
-    { name: "Emergency Care", id: "allopathy-emergency" },
-    { name: "Panchakarma", id: "ayurveda-panchakarma" },
-    { name: "Physiotherapy", id: "rehab-physio" },
-    { name: "Laboratory", id: "lab-pharmacy" },
-    { name: "Ambulance", id: "ambulance" },
-    { name: "Equipment Rental", id: "equipment-rental" },
-  ]
-
-  const policies = [
-    { name: "Privacy Policy", id: "policies" },
-    { name: "Terms & Conditions", id: "policies" },
-    { name: "Health Guidelines", id: "policies" },
-  ]
-
   return (
-    <footer className="bg-slate-900 text-slate-200 border-t border-slate-800 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-3xl -z-10" aria-hidden="true" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-accent/5 rounded-full blur-3xl -z-10" aria-hidden="true" />
-
-      {/* Main Footer */}
-      <div className="container mx-auto px-4 py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
-          {/* Brand */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-tr from-primary to-accent rounded-xl p-2.5 shadow-md shadow-primary/10">
-                <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
-                </svg>
+    <footer className="bg-[#0b1f4a] text-slate-300">
+      {/* CTA Banner */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d9488]/20 to-transparent" />
+        <div className="w-full px-4 lg:px-8 py-16 relative">
+          <div className="max-w-7xl mx-auto">
+            <div className="bg-gradient-to-r from-[#0d9488] to-[#0b7c72] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 shadow-2xl">
+              <div className="text-white text-center lg:text-left">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-sans font-bold mb-2">Need Medical Assistance?</h3>
+                <p className="text-white/80 text-base">Our team is available 24/7 to help you with appointments and emergencies.</p>
               </div>
-              <div className="flex flex-col">
-                <span className="font-sans text-2xl font-bold text-white">
-                  Sripada
-                </span>
-                <span className="text-[10px] font-bold tracking-widest text-slate-400 uppercase -mt-0.5">
-                  Multi-Speciality Hospitals
-                </span>
-              </div>
-            </div>
-            
-            <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
-              Empowering wellness by combining the diagnostic precision of Allopathy, the natural healing of Ayurveda, and the restorative strength of Rehabilitation.
-            </p>
-
-            {/* Social Icons */}
-            <div className="flex items-center gap-3">
-              {[
-                { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-                { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-                { icon: Youtube, href: "https://youtube.com", label: "YouTube" }
-              ].map((social, i) => (
+              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <a
-                  key={i}
-                  href={social.href}
+                  href="tel:+919XXXXXXXXX"
+                  className="inline-flex items-center justify-center gap-2 bg-white text-[#0b1f4a] hover:bg-white/90 font-bold px-6 py-3.5 rounded-xl transition-all hover:scale-[1.02] shadow-lg"
+                >
+                  <Phone className="h-4 w-4" />
+                  Emergency Helpline
+                </a>
+                <a
+                  href="https://wa.me/919XXXXXXXXX"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-slate-800 p-2.5 rounded-xl hover:bg-primary hover:text-white transition-all text-slate-400 hover:scale-110 flex items-center justify-center border border-slate-700/50 touch-target"
-                  aria-label={social.label}
+                  className="inline-flex items-center justify-center gap-2 bg-[#0b1f4a] hover:bg-[#152d6b] text-white font-bold px-6 py-3.5 rounded-xl transition-all hover:scale-[1.02] shadow-lg border border-white/20"
                 >
-                  <social.icon className="h-4 w-4" aria-hidden="true" />
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp Us
                 </a>
-              ))}
+              </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-sans font-bold text-lg text-white mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-primary rounded-full" aria-hidden="true" />
-              Quick Links
-            </h4>
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link.id}>
-                  <button
-                    onClick={() => onNavigate(link.id)}
-                    className="text-sm text-slate-400 hover:text-white transition-colors duration-200 text-left font-medium link-underline touch-target"
+      {/* Main Footer */}
+      <div className="w-full px-4 lg:px-8 pt-16 pb-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8">
+            {/* Brand Column */}
+            <div className="lg:col-span-4 space-y-6">
+              <button onClick={() => onNavigate("home")} className="flex items-center gap-3 group">
+                <div className="relative">
+                  <img 
+                    src="/Sripada Hospital (4).png" 
+                    alt="Sripada Hospitals Logo" 
+                    className="w-20 h-20 rounded-2xl object-contain"
+                  />
+                </div>
+              </button>
+
+              <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
+                A trusted healthcare destination combining Allopathy, Ayurveda, and Rehabilitation services to help patients recover and improve their quality of life.
+              </p>
+
+              {/* Social Icons */}
+              <div className="flex items-center gap-2">
+                {[
+                  { label: "Facebook", Icon: Facebook, href: "#" },
+                  { label: "Instagram", Icon: Instagram, href: "#" },
+                  { label: "YouTube", Icon: Youtube, href: "#" },
+                  { label: "WhatsApp", Icon: MessageCircle, href: "https://wa.me/919XXXXXXXXX" },
+                ].map((s) => (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all border border-white/10 hover:border-white/20"
+                    aria-label={s.label}
                   >
-                    {link.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+                    <s.Icon className="h-4 w-4" />
+                  </a>
+                ))}
+              </div>
+            </div>
 
-          {/* Services */}
-          <div>
-            <h4 className="font-sans font-bold text-lg text-white mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-accent rounded-full" aria-hidden="true" />
-              Our Services
-            </h4>
-            <ul className="space-y-3">
-              {services.map((service) => (
-                <li key={service.id}>
-                  <button
-                    onClick={() => onNavigate(service.id)}
-                    className="text-sm text-slate-400 hover:text-white transition-colors duration-200 text-left font-medium link-underline touch-target"
-                  >
-                    {service.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+            {/* Quick Links */}
+            <div className="lg:col-span-2">
+              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-5">Quick Links</h4>
+              <ul className="space-y-2">
+                {quickLinks.map((link) => (
+                  <li key={link.id}>
+                    <button
+                      onClick={() => onNavigate(link.id)}
+                      className="group flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors w-full text-left py-0.5"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5 text-[#0d9488] flex-shrink-0 group-hover:translate-x-1 transition-transform duration-200" />
+                      {link.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          {/* Contact Info */}
-          <div>
-            <h4 className="font-sans font-bold text-lg text-white mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-success rounded-full" aria-hidden="true" />
-              Contact Us
-            </h4>
-            <ul className="space-y-4">
-              <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 mt-0.5 text-primary flex-shrink-0" aria-hidden="true" />
-                <span className="text-sm text-slate-400 leading-relaxed">
-                  123 Healthcare Avenue, Medical District, Hyderabad, Telangana - 500001
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-accent flex-shrink-0" aria-hidden="true" />
-                <a href="tel:+919XXXXXXXXX" className="text-sm text-slate-400 hover:text-white transition-colors font-medium">
-                  +91 9XXX XXX XXX
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-info flex-shrink-0" aria-hidden="true" />
-                <a href="mailto:info@sripadahospitals.com" className="text-sm text-slate-400 hover:text-white transition-colors font-medium">
-                  info@sripadahospitals.com
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-success flex-shrink-0" aria-hidden="true" />
-                <span className="text-sm text-slate-400 font-medium">
-                  Emergency Trauma Care: 24/7
-                </span>
-              </li>
-            </ul>
+            {/* Departments */}
+            <div className="lg:col-span-2">
+              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-5">Departments</h4>
+              <ul className="space-y-2">
+                {departments.map((dept) => (
+                  <li key={dept.name}>
+                    <button
+                      onClick={() => onNavigate(dept.id)}
+                      className="group flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors w-full text-left py-0.5"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5 text-[#0d9488] flex-shrink-0 group-hover:translate-x-1 transition-transform duration-200" />
+                      {dept.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div className="lg:col-span-2">
+              <h4 className="text-xs font-bold text-white uppercase tracking-widests mb-5">Support</h4>
+              <ul className="space-y-2">
+                {supportLinks.map((link) => (
+                  <li key={link.name}>
+                    <button
+                      onClick={() => onNavigate(link.id)}
+                      className="group flex items-center gap-2.5 text-sm text-slate-400 hover:text-white transition-colors w-full text-left py-0.5"
+                    >
+                      <ArrowRight className="h-3.5 w-3.5 text-[#0d9488] flex-shrink-0 group-hover:translate-x-1 transition-transform duration-200" />
+                      {link.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div className="lg:col-span-2">
+              <h4 className="text-xs font-bold text-white uppercase tracking-widest mb-5">Contact</h4>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-3">
+                  <MapPin className="h-4 w-4 text-[#0d9488] flex-shrink-0 mt-0.5" />
+                  <span className="text-sm text-slate-400 leading-relaxed">Govindappa Silks, Lakshmipura, Madanayakanahalli, Karnataka - 562162</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 text-[#0d9488] flex-shrink-0" />
+                  <a href="tel:+919XXXXXXXXX" className="text-sm text-slate-400 hover:text-white transition-colors">
+                    +91 9XXX XXX XXX
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                  <a href="mailto:info@sripadahospitals.com" className="text-sm text-slate-400 hover:text-white transition-colors">
+                    info@sripadahospitals.com
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Clock className="h-4 w-4 text-amber-400 flex-shrink-0" />
+                  <span className="text-sm text-slate-400">24/7 Emergency</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-slate-800/80 bg-slate-950/40">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
-            <p className="text-xs text-slate-500 font-medium">
-              &copy; {new Date().getFullYear()} Sripada Multi-Speciality Hospitals. All rights reserved. Designed for excellence.
+      <div className="border-t border-white/10">
+        <div className="w-full px-4 lg:px-8 py-5">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-3 text-center">
+            <p className="text-xs text-slate-500">
+              &copy; {new Date().getFullYear()} Sripada Multi-Speciality Hospitals. All rights reserved.
             </p>
-            <div className="flex items-center gap-5 flex-wrap justify-center">
-              {policies.map((policy, index) => (
-                <button
-                  key={index}
-                  onClick={() => onNavigate(policy.id)}
-                  className="text-xs text-slate-500 hover:text-white transition-colors duration-200 font-semibold touch-target"
-                >
-                  {policy.name}
-                </button>
-              ))}
-            </div>
+            <p className="text-xs text-slate-500 flex items-center gap-1">
+              Trust <Heart className="h-3 w-3 text-rose-500 fill-rose-500" /> Care <Heart className="h-3 w-3 text-rose-500 fill-rose-500" /> Excellence
+            </p>
+            <p className="text-xs text-slate-600">
+              Designed &amp; developed by{" "}
+              <a href="https://buzziwah.com" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-white transition-colors font-medium">
+                buzziwah.com
+              </a>
+            </p>
           </div>
         </div>
       </div>

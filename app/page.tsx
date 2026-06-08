@@ -34,15 +34,6 @@ export default function SripadaHospital() {
     handleHashChange()
     window.addEventListener("hashchange", handleHashChange)
 
-    // Show appointment modal after 8 seconds
-    const timer = setTimeout(() => {
-      const hasSeenModal = sessionStorage.getItem("appointmentModalShown")
-      if (!hasSeenModal) {
-        setShowAppointmentModal(true)
-        sessionStorage.setItem("appointmentModalShown", "true")
-      }
-    }, 8000)
-
     // Scroll listener for Back to Top button
     const handleScroll = () => {
       if (window.scrollY > 300) {
@@ -56,7 +47,6 @@ export default function SripadaHospital() {
     return () => {
       window.removeEventListener("hashchange", handleHashChange)
       window.removeEventListener("scroll", handleScroll)
-      clearTimeout(timer)
     }
   }, [])
 
@@ -154,7 +144,7 @@ export default function SripadaHospital() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-24 right-6 z-50 bg-[#295D93] hover:bg-[#295D93]/90 text-white p-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center border border-[#295D93]/20"
+          className="fixed bottom-24 right-6 z-50 bg-gradient-to-br from-[#0b1f4a] to-[#1a3a7c] hover:from-[#152d6b] text-white p-3.5 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center border border-white/20"
           aria-label="Back to Top"
         >
           <ArrowUp className="h-5 w-5" />

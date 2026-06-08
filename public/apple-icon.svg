@@ -1,0 +1,35 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="32" fill="#2563EB"/>
+  
+  <!-- Stethoscope -->
+  <g transform="translate(90,90)">
+    <!-- Main tube -->
+    <path d="M-35,-25 Q-35,-35 -25,-35 L25,-35 Q35,-35 35,-25 L35,15 Q35,25 25,25 L15,25" 
+          stroke="white" stroke-width="8" fill="none"/>
+    
+    <!-- Left earpiece -->
+    <circle cx="-25" cy="-35" r="6" fill="white"/>
+    
+    <!-- Right earpiece -->  
+    <circle cx="25" cy="-35" r="6" fill="white"/>
+    
+    <!-- Chest piece (main circle) -->
+    <circle cx="15" cy="25" r="15" fill="#0D9488"/>
+    <circle cx="15" cy="25" r="8" fill="#2563EB"/>
+    
+    <!-- Small connecting tube -->
+    <rect x="13" y="25" width="4" height="15" fill="white"/>
+    
+    <!-- Diaphragm -->
+    <circle cx="15" cy="45" r="8" fill="white"/>
+    <circle cx="15" cy="45" r="5" fill="#2563EB"/>
+    
+    <!-- Cross symbol for medical -->
+    <rect x="12" y="44" width="6" height="2" fill="#0D9488"/>
+    <rect x="14" y="42" width="2" height="6" fill="#0D9488"/>
+  </g>
+  
+  <!-- Hospital name -->
+  <text x="90" y="140" text-anchor="middle" fill="white" font-family="system-ui" font-size="12" font-weight="600">SRIPADA</text>
+  <text x="90" y="155" text-anchor="middle" fill="#94A3B8" font-family="system-ui" font-size="8" font-weight="500">HOSPITALS</text>
+</svg>

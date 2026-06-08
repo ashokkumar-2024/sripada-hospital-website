@@ -1,8 +1,10 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { Menu, X, ChevronDown, Phone, Heart, Stethoscope, Leaf, Activity } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
+import {
+  Menu, X, ChevronDown, Phone, Heart, Stethoscope, Leaf, Activity,
+  Calendar, MapPin, Clock, ArrowRight, Mail
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
@@ -61,148 +63,211 @@ const rehabServices = [
   { name: "Pain Management", id: "rehab-pain" },
 ]
 
+// Primary nav — shown in main bar
+const primaryNav = [
+  { name: "Home", id: "home" },
+  { name: "About Us", id: "about" },
+  { name: "Services", id: "services", hasDropdown: true },
+  { name: "Emergency & ICU", id: "emergency-icu" },
+  { name: "Lab & Pharmacy", id: "lab-pharmacy" },
+  { name: "Contact", id: "contact" },
+]
+
+// Secondary nav — inside "More" dropdown
+const secondaryNav = [
+  { name: "Ambulance", id: "ambulance" },
+  { name: "Testimonials", id: "testimonials" },
+  { name: "Gallery", id: "gallery" },
+  { name: "Blogs", id: "blogs" },
+  { name: "Careers", id: "careers" },
+  { name: "Policies", id: "policies" },
+  { name: "Equipment Rental", id: "equipment-rental" },
+]
+
 export function Header({ activeSection, onNavigate, onBookAppointment }: HeaderProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
   const [servicesOpen, setServicesOpen] = useState(false)
+  const [moreOpen, setMoreOpen] = useState(false)
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
-  const [mobileServiceCategory, setMobileServiceCategory] = useState<string | null>(null)
+  const [mobileCat, setMobileCat] = useState<string | null>(null)
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const servicesRef = useRef<HTMLDivElement>(null)
+  const moreRef = useRef<HTMLDivElement>(null)
+  const servicesTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const moreTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    const onScroll = () => setScrolled(window.scrollY > 10)
+    window.addEventListener("scroll", onScroll)
+    return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const navItems = [
-    { name: "Home", id: "home" },
-    { name: "About Us", id: "about" },
-    { name: "Services", id: "services", hasDropdown: true },
-    { name: "Ambulance", id: "ambulance" },
-    { name: "Emergency & ICU", id: "emergency-icu" },
-    { name: "Lab & Pharmacy", id: "lab-pharmacy" },
-    { name: "Testimonials", id: "testimonials" },
-    { name: "Gallery", id: "gallery" },
-    { name: "Blogs", id: "blogs" },
-    { name: "Careers", id: "careers" },
-    { name: "Contact", id: "contact" },
-  ]
+  const openServices = () => {
+    if (servicesTimer.current) clearTimeout(servicesTimer.current)
+    setServicesOpen(true)
+  }
+  const closeServices = () => {
+    servicesTimer.current = setTimeout(() => setServicesOpen(false), 120)
+  }
+  const openMore = () => {
+    if (moreTimer.current) clearTimeout(moreTimer.current)
+    setMoreOpen(true)
+  }
+  const closeMore = () => {
+    moreTimer.current = setTimeout(() => setMoreOpen(false), 120)
+  }
 
-  const handleNavClick = (id: string) => {
+  const isServiceActive =
+    activeSection.includes("service") ||
+    activeSection.includes("allopathy") ||
+    activeSection.includes("ayurveda") ||
+    activeSection.includes("rehab")
+
+  const isMoreActive = secondaryNav.some((n) => n.id === activeSection)
+
+  const go = (id: string) => {
     onNavigate(id)
-    setMobileMenuOpen(false)
+    setMobileOpen(false)
     setServicesOpen(false)
+    setMoreOpen(false)
   }
 
   return (
     <header className={cn(
       "sticky top-0 z-50 w-full transition-all duration-300",
-      scrolled 
-        ? "glass-navbar shadow-lg py-1 lg:py-2" 
-        : "bg-card border-b border-border py-2 lg:py-3"
+      scrolled
+        ? "bg-white/95 backdrop-blur-xl shadow-[0_2px_20px_-4px_rgba(11,31,74,0.12)] border-b border-slate-100"
+        : "bg-white border-b border-slate-100"
     )}>
-      {/* Top emergency bar - Accessible high contrast */}
+
+      {/* ── TOP UTILITY BAR ── */}
       <div className={cn(
-        "bg-primary text-primary-foreground py-2 px-4 transition-all duration-300",
-        scrolled ? "hidden h-0 overflow-hidden" : "block"
+        "bg-[#0b1f4a] overflow-hidden transition-all duration-300",
+        scrolled ? "max-h-0 opacity-0" : "max-h-12 opacity-100"
       )}>
-        <div className="container mx-auto flex justify-between items-center text-xs lg:text-sm font-medium">
-          <div className="flex items-center gap-4">
-            <a 
-              href="tel:+919XXXXXXXXX" 
-              className="flex items-center gap-2 hover:text-white/90 transition-colors touch-target"
-              aria-label="Emergency helpline"
-            >
-              <Phone className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="font-semibold">Emergency 24/7 Helpline: +91 9XXX XXX XXX</span>
+        <div className="w-full px-4 lg:px-8 h-10 flex items-center justify-between">
+          {/* Left */}
+          <div className="flex items-center gap-0">
+            <a href="tel:+919XXXXXXXXX"
+              className="flex items-center gap-1.5 pr-4 text-white/80 hover:text-white transition-colors text-xs font-medium">
+              <Phone className="h-3 w-3 text-[#0d9488] flex-shrink-0" />
+              <span>Emergency: +91 9XXX XXX XXX</span>
             </a>
+            <a href="mailto:info@sripadahospitals.com"
+              className="hidden md:flex items-center gap-1.5 px-4 border-l border-white/15 text-white/60 hover:text-white transition-colors text-xs">
+              <Mail className="h-3 w-3 text-amber-400 flex-shrink-0" />
+              info@sripadahospitals.com
+            </a>
+            <div className="hidden lg:flex items-center gap-1.5 pl-4 border-l border-white/15 text-white/60 text-xs">
+              <MapPin className="h-3 w-3 text-white/40 flex-shrink-0" />
+              Hyderabad, Telangana
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="hidden md:inline font-medium">Trust, Care and Medical Excellence</span>
-            <Heart className="h-4 w-4 text-white" aria-hidden="true" />
+          {/* Right */}
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-1.5 text-white/60 text-xs">
+              <Clock className="h-3 w-3 text-amber-400 flex-shrink-0" />
+              OPD: Mon – Sat, 8 AM – 8 PM
+            </div>
+            <div className="flex items-center gap-1.5 text-white/50 text-xs">
+              <Heart className="h-3 w-3 text-rose-400 fill-rose-400 flex-shrink-0" />
+              <span className="hidden sm:inline">Trust · Care · Excellence</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Main header */}
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 lg:h-[72px]">
-          {/* Logo */}
-          <Link 
-            href="#home" 
-            onClick={() => handleNavClick("home")}
-            className="flex items-center gap-3 group transition-transform duration-300 hover:scale-[1.02] touch-target"
-            aria-label="Sripada Hospitals Home"
-          >
-            <div className="relative bg-gradient-to-tr from-primary to-accent rounded-xl p-2.5 shadow-md shadow-primary/15 flex items-center justify-center">
-              <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
-              </svg>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-sans text-xl lg:text-2xl font-bold gradient-text">
-                Sripada
-              </span>
-              <span className="text-[10px] lg:text-xs font-semibold tracking-wider text-muted-foreground uppercase -mt-0.5">
-                Multi-Speciality Hospitals
-              </span>
-            </div>
-          </Link>
+      {/* ── MAIN HEADER BAR ── */}
+      <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8">
+        <div className="flex items-center justify-between h-[60px] sm:h-[68px]">
 
-          {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-1" aria-label="Main navigation">
-            {navItems.map((item) => (
-              <div key={item.id} className="relative">
+          {/* LOGO */}
+          <button
+            onClick={() => go("home")}
+            className="flex items-center gap-3 flex-shrink-0 group"
+            aria-label="Sripada Hospitals home"
+          >
+            {/* Hospital Logo */}
+            <div className="relative flex-shrink-0">
+              <img 
+                src="/Sripada Hospital (4).png" 
+                alt="Sripada Hospitals Logo" 
+                className="w-20 h-20 rounded-2xl object-contain"
+              />
+            </div>
+          </button>
+
+          {/* DESKTOP NAV */}
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1" role="navigation" aria-label="Main navigation">
+
+            {primaryNav.map((item) => (
+              <div key={item.id} className="relative" ref={item.hasDropdown ? servicesRef : undefined}>
                 {item.hasDropdown ? (
                   <div
-                    className="relative"
-                    onMouseEnter={() => setServicesOpen(true)}
-                    onMouseLeave={() => setServicesOpen(false)}
+                    onMouseEnter={openServices}
+                    onMouseLeave={closeServices}
                   >
+                    {/* Services trigger */}
                     <button
-                      className={cn(
-                        "flex items-center gap-1 px-3 py-2.5 text-sm font-semibold rounded-lg transition-all touch-target",
-                        activeSection.includes("service") || activeSection.includes("allopathy") || 
-                        activeSection.includes("ayurveda") || activeSection.includes("rehab")
-                          ? "text-primary bg-primary/5 shadow-sm"
-                          : "text-foreground/80 hover:text-primary hover:bg-muted"
-                      )}
                       aria-expanded={servicesOpen}
                       aria-haspopup="true"
+                      className={cn(
+                        "flex items-center gap-1 px-2 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 whitespace-nowrap",
+                        isServiceActive
+                          ? "bg-[#0b1f4a] text-white"
+                          : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-100"
+                      )}
                     >
-                      {item.name}
-                      <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", servicesOpen && "rotate-180")} aria-hidden="true" />
+                      <span className="whitespace-nowrap">{item.name}</span>
+                      <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-200 flex-shrink-0", servicesOpen && "rotate-180")} />
                     </button>
 
-                    {/* Mega Menu Dropdown */}
+                    {/* ── MEGA MENU ── */}
                     <div className={cn(
-                      "absolute top-full left-1/2 -translate-x-1/2 pt-3 transition-all duration-200 ease-out origin-top",
-                      servicesOpen 
-                        ? "opacity-100 translate-y-0 pointer-events-auto scale-100" 
-                        : "opacity-0 -translate-y-2 pointer-events-none scale-95"
-                    )}>
-                      <div className="bg-card rounded-2xl shadow-2xl border border-border/80 p-8 min-w-[850px] relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-full blur-2xl" aria-hidden="true" />
-                        <div className="absolute bottom-0 left-0 w-32 h-32 bg-secondary/5 rounded-full blur-2xl" aria-hidden="true" />
-
-                        <div className="grid grid-cols-3 gap-8 relative z-10">
-                          {/* Allopathy */}
+                      "absolute top-[calc(100%+0px)] left-1/2 -translate-x-1/2 w-[600px] xl:w-[800px] transition-all duration-200 origin-top z-50 pt-2",
+                      servicesOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
+                    )}
+                      onMouseEnter={openServices}
+                      onMouseLeave={closeServices}
+                    >
+                      <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden">
+                        {/* Mega menu header */}
+                        <div className="bg-gradient-to-r from-[#0b1f4a] to-[#1e4080] px-8 py-4 flex items-center justify-between">
                           <div>
-                            <h3 className="font-sans font-bold text-primary mb-4 flex items-center gap-2 text-base pb-2 border-b border-primary/10">
-                              <Stethoscope className="h-4 w-4 text-primary" aria-hidden="true" />
-                              Allopathy Services
-                            </h3>
-                            <ul className="space-y-1 max-h-72 overflow-y-auto pr-2" role="menu">
-                              {allopathyServices.map((service) => (
-                                <li key={service.id} role="none">
+                            <p className="text-white font-bold text-sm whitespace-nowrap">Our Medical Departments</p>
+                            <p className="text-white/60 text-xs mt-0.5 whitespace-nowrap">40+ specialties across 3 integrated departments</p>
+                          </div>
+                          <button
+                            onClick={() => go("services")}
+                            className="flex items-center gap-1.5 text-xs font-bold text-white/80 hover:text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition-all whitespace-nowrap flex-shrink-0"
+                          >
+                            <span className="whitespace-nowrap">View All Services</span> <ArrowRight className="h-3 w-3 flex-shrink-0" />
+                          </button>
+                        </div>
+
+                        {/* Three columns */}
+                        <div className="grid grid-cols-3 divide-x divide-slate-100">
+
+                          {/* Allopathy */}
+                          <div className="p-6">
+                            <div className="flex items-center gap-2.5 mb-4">
+                              <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center">
+                                <Stethoscope className="h-4 w-4 text-[#0b1f4a]" />
+                              </div>
+                              <div>
+                                <p className="font-bold text-[#0b1f4a] text-sm whitespace-nowrap">Allopathy</p>
+                                <p className="text-[10px] text-slate-400 whitespace-nowrap">Modern Medicine</p>
+                              </div>
+                            </div>
+                            <ul className="space-y-0.5 max-h-60 overflow-y-auto pr-1 custom-scrollbar">
+                              {allopathyServices.map((s) => (
+                                <li key={s.id}>
                                   <button
-                                    onClick={() => handleNavClick(service.id)}
-                                    className="text-sm text-muted-foreground hover:text-primary hover:bg-primary/5 px-2.5 py-1.5 rounded-lg w-full text-left transition-colors font-medium touch-target"
-                                    role="menuitem"
+                                    onClick={() => go(s.id)}
+                                    className="w-full text-left px-3 py-1.5 text-sm text-slate-500 hover:text-[#0b1f4a] hover:bg-blue-50 rounded-lg font-medium transition-colors whitespace-nowrap"
                                   >
-                                    {service.name}
+                                    <span className="whitespace-nowrap">{s.name}</span>
                                   </button>
                                 </li>
                               ))}
@@ -210,20 +275,24 @@ export function Header({ activeSection, onNavigate, onBookAppointment }: HeaderP
                           </div>
 
                           {/* Ayurveda */}
-                          <div>
-                            <h3 className="font-sans font-bold text-accent mb-4 flex items-center gap-2 text-base pb-2 border-b border-accent/10">
-                              <Leaf className="h-4 w-4 text-accent" aria-hidden="true" />
-                              Ayurveda Services
-                            </h3>
-                            <ul className="space-y-1" role="menu">
-                              {ayurvedaServices.map((service) => (
-                                <li key={service.id} role="none">
+                          <div className="p-6">
+                            <div className="flex items-center gap-2.5 mb-4">
+                              <div className="w-8 h-8 rounded-xl bg-teal-50 flex items-center justify-center">
+                                <Leaf className="h-4 w-4 text-[#0d9488]" />
+                              </div>
+                              <div>
+                                <p className="font-bold text-[#0d9488] text-sm whitespace-nowrap">Ayurveda</p>
+                                <p className="text-[10px] text-slate-400 whitespace-nowrap">Traditional Healing</p>
+                              </div>
+                            </div>
+                            <ul className="space-y-0.5">
+                              {ayurvedaServices.map((s) => (
+                                <li key={s.id}>
                                   <button
-                                    onClick={() => handleNavClick(service.id)}
-                                    className="text-sm text-muted-foreground hover:text-accent hover:bg-accent/5 px-2.5 py-1.5 rounded-lg w-full text-left transition-colors font-medium touch-target"
-                                    role="menuitem"
+                                    onClick={() => go(s.id)}
+                                    className="w-full text-left px-3 py-1.5 text-sm text-slate-500 hover:text-[#0d9488] hover:bg-teal-50 rounded-lg font-medium transition-colors whitespace-nowrap"
                                   >
-                                    {service.name}
+                                    <span className="whitespace-nowrap">{s.name}</span>
                                   </button>
                                 </li>
                               ))}
@@ -231,221 +300,248 @@ export function Header({ activeSection, onNavigate, onBookAppointment }: HeaderP
                           </div>
 
                           {/* Rehabilitation */}
-                          <div>
-                            <h3 className="font-sans font-bold text-success mb-4 flex items-center gap-2 text-base pb-2 border-b border-success/10">
-                              <Activity className="h-4 w-4 text-success" aria-hidden="true" />
-                              Rehabilitation
-                            </h3>
-                            <ul className="space-y-1" role="menu">
-                              {rehabServices.map((service) => (
-                                <li key={service.id} role="none">
+                          <div className="p-6">
+                            <div className="flex items-center gap-2.5 mb-4">
+                              <div className="w-8 h-8 rounded-xl bg-violet-50 flex items-center justify-center">
+                                <Activity className="h-4 w-4 text-[#7c3aed]" />
+                              </div>
+                              <div>
+                                <p className="font-bold text-[#7c3aed] text-sm whitespace-nowrap">Rehabilitation</p>
+                                <p className="text-[10px] text-slate-400 whitespace-nowrap">Recovery & Therapy</p>
+                              </div>
+                            </div>
+                            <ul className="space-y-0.5">
+                              {rehabServices.map((s) => (
+                                <li key={s.id}>
                                   <button
-                                    onClick={() => handleNavClick(service.id)}
-                                    className="text-sm text-muted-foreground hover:text-success hover:bg-success/5 px-2.5 py-1.5 rounded-lg w-full text-left transition-colors font-medium touch-target"
-                                    role="menuitem"
+                                    onClick={() => go(s.id)}
+                                    className="w-full text-left px-3 py-1.5 text-sm text-slate-500 hover:text-[#7c3aed] hover:bg-violet-50 rounded-lg font-medium transition-colors whitespace-nowrap"
                                   >
-                                    {service.name}
+                                    <span className="whitespace-nowrap">{s.name}</span>
                                   </button>
                                 </li>
                               ))}
                             </ul>
                           </div>
                         </div>
-
-                        <div className="mt-6 pt-4 border-t border-border flex justify-between items-center relative z-10">
-                          <p className="text-xs text-muted-foreground">Comprehensive integrative healthcare solutions for your family.</p>
-                          <button
-                            onClick={() => handleNavClick("services")}
-                            className="text-sm font-semibold text-primary hover:text-accent flex items-center gap-1 transition-colors hover:underline touch-target"
-                          >
-                            View All Services
-                          </button>
-                        </div>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <button
-                    onClick={() => handleNavClick(item.id)}
+                    onClick={() => go(item.id)}
                     className={cn(
-                      "px-3 py-2.5 text-sm font-semibold rounded-lg transition-all touch-target",
+                      "px-2 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 whitespace-nowrap",
                       activeSection === item.id
-                        ? "text-primary bg-primary/5 shadow-sm"
-                        : "text-foreground/80 hover:text-primary hover:bg-muted"
+                        ? "bg-[#0b1f4a] text-white"
+                        : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-100"
                     )}
-                    aria-current={activeSection === item.id ? "page" : undefined}
                   >
-                    {item.name}
+                    <span className="whitespace-nowrap">{item.name}</span>
                   </button>
                 )}
               </div>
             ))}
+
+            {/* ── MORE DROPDOWN ── */}
+            <div className="relative" ref={moreRef}>
+              <div
+                onMouseEnter={openMore}
+                onMouseLeave={closeMore}
+              >
+                <button
+                  aria-expanded={moreOpen}
+                  className={cn(
+                    "flex items-center gap-1 px-2 xl:px-3.5 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-all duration-150 whitespace-nowrap",
+                    isMoreActive
+                      ? "bg-[#0b1f4a] text-white"
+                      : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-100"
+                  )}
+                >
+                  <span className="whitespace-nowrap">More</span>
+                  <ChevronDown className={cn("h-3.5 w-3.5 transition-transform duration-200 flex-shrink-0", moreOpen && "rotate-180")} />
+                </button>
+
+                <div className={cn(
+                  "absolute top-[calc(100%+0px)] right-0 w-52 bg-white rounded-2xl shadow-2xl border border-slate-100 py-2 transition-all duration-200 origin-top-right z-50 pt-2",
+                  moreOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
+                )}
+                  onMouseEnter={openMore}
+                  onMouseLeave={closeMore}
+                >
+                  {secondaryNav.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => go(item.id)}
+                      className={cn(
+                        "w-full text-left px-4 py-2.5 text-sm font-semibold transition-colors whitespace-nowrap",
+                        activeSection === item.id
+                          ? "text-[#0b1f4a] bg-blue-50"
+                          : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
+                      )}
+                    >
+                      <span className="whitespace-nowrap">{item.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </nav>
 
-          {/* CTA Button */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Button 
-              onClick={onBookAppointment}
-              className="bg-success hover:bg-success/90 text-success-foreground font-semibold px-6 py-5 rounded-xl shadow-md shadow-success/20 touch-target transition-all duration-200 hover:scale-[1.02]"
+          {/* CTA + EMERGENCY */}
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-shrink-0">
+            <a
+              href="tel:+919XXXXXXXXX"
+              className="hidden xl:flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 hover:border-[#0d9488] hover:bg-teal-50 transition-all group flex-shrink-0"
             >
-              Book Appointment
+              <div className="w-7 h-7 rounded-lg bg-[#0d9488] flex items-center justify-center flex-shrink-0">
+                <Phone className="h-3.5 w-3.5 text-white" />
+              </div>
+              <div className="leading-none">
+                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Emergency</p>
+                <p className="text-sm font-bold text-[#0b1f4a] group-hover:text-[#0d9488] transition-colors whitespace-nowrap">24/7 Helpline</p>
+              </div>
+            </a>
+
+            <Button
+              onClick={onBookAppointment}
+              className="bg-[#0b1f4a] hover:bg-[#1e4080] text-white font-bold px-3 sm:px-4 xl:px-6 h-9 sm:h-10 xl:h-11 rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-[1.02] gap-1.5 xl:gap-2 text-xs sm:text-sm whitespace-nowrap flex-shrink-0"
+            >
+              <Calendar className="h-3.5 w-3.5 xl:h-4 xl:w-4 flex-shrink-0" />
+              <span className="whitespace-nowrap">Book Appointment</span>
             </Button>
           </div>
 
-          {/* Mobile menu button */}
+          {/* MOBILE HAMBURGER */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden p-2.5 rounded-xl bg-muted/50 hover:bg-muted text-foreground/80 transition-colors touch-target"
-            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileMenuOpen}
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            className="lg:hidden w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-[#0b1f4a] transition-colors"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6" aria-hidden="true" /> : <Menu className="h-6 w-6" aria-hidden="true" />}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* ── MOBILE DRAWER ── */}
       <div className={cn(
-        "xl:hidden bg-card border-t border-border overflow-hidden transition-all duration-300 ease-in-out",
-        mobileMenuOpen ? "max-h-[80vh] opacity-100 border-b" : "max-h-0 opacity-0 pointer-events-none"
+        "lg:hidden bg-white border-t border-slate-100 overflow-hidden transition-all duration-300",
+        mobileOpen ? "max-h-[85vh]" : "max-h-0"
       )}>
-        <nav className="container mx-auto px-4 py-6 space-y-1 overflow-y-auto max-h-[70vh]" aria-label="Mobile navigation">
-          {navItems.map((item) => (
-            <div key={item.id} className="border-b border-border/40 last:border-b-0 pb-1 last:pb-0">
-              {item.hasDropdown ? (
-                <div>
-                  <button
-                    onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                    className={cn(
-                      "flex items-center justify-between w-full px-3 py-3 text-sm font-semibold rounded-lg touch-target",
-                      activeSection.includes("service") || activeSection.includes("allopathy") || 
-                      activeSection.includes("ayurveda") || activeSection.includes("rehab")
-                        ? "text-primary bg-primary/5"
-                        : "text-foreground/80 hover:bg-muted"
-                    )}
-                    aria-expanded={mobileServicesOpen}
-                  >
-                    <span>{item.name}</span>
-                    <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", mobileServicesOpen && "rotate-180")} aria-hidden="true" />
-                  </button>
+        <div className="overflow-y-auto max-h-[80vh]">
 
-                  <div className={cn(
-                    "pl-4 space-y-2 mt-1 overflow-hidden transition-all duration-300",
-                    mobileServicesOpen ? "max-h-[500px] opacity-100 py-2" : "max-h-0 opacity-0"
-                  )}>
-                    {/* Allopathy Accordion */}
-                    <div className="rounded-lg border border-border/50 overflow-hidden">
-                      <button
-                        onClick={() => setMobileServiceCategory(mobileServiceCategory === "allopathy" ? null : "allopathy")}
-                        className="flex items-center justify-between w-full px-4 py-2.5 text-xs font-bold text-primary bg-primary/5 touch-target"
-                        aria-expanded={mobileServiceCategory === "allopathy"}
-                      >
-                        <span>Allopathy</span>
-                        <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", mobileServiceCategory === "allopathy" && "rotate-180")} aria-hidden="true" />
-                      </button>
-                      {mobileServiceCategory === "allopathy" && (
-                        <div className="bg-card/50 px-2 py-1 space-y-1 max-h-48 overflow-y-auto">
-                          {allopathyServices.map((service) => (
-                            <button
-                              key={service.id}
-                              onClick={() => handleNavClick(service.id)}
-                              className="block w-full text-left px-3 py-2 text-xs text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-md font-medium touch-target"
-                            >
-                              {service.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Ayurveda Accordion */}
-                    <div className="rounded-lg border border-border/50 overflow-hidden">
-                      <button
-                        onClick={() => setMobileServiceCategory(mobileServiceCategory === "ayurveda" ? null : "ayurveda")}
-                        className="flex items-center justify-between w-full px-4 py-2.5 text-xs font-bold text-accent bg-accent/5 touch-target"
-                        aria-expanded={mobileServiceCategory === "ayurveda"}
-                      >
-                        <span>Ayurveda</span>
-                        <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", mobileServiceCategory === "ayurveda" && "rotate-180")} aria-hidden="true" />
-                      </button>
-                      {mobileServiceCategory === "ayurveda" && (
-                        <div className="bg-card/50 px-2 py-1 space-y-1">
-                          {ayurvedaServices.map((service) => (
-                            <button
-                              key={service.id}
-                              onClick={() => handleNavClick(service.id)}
-                              className="block w-full text-left px-3 py-2 text-xs text-muted-foreground hover:text-accent hover:bg-accent/5 rounded-md font-medium touch-target"
-                            >
-                              {service.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Rehabilitation Accordion */}
-                    <div className="rounded-lg border border-border/50 overflow-hidden">
-                      <button
-                        onClick={() => setMobileServiceCategory(mobileServiceCategory === "rehab" ? null : "rehab")}
-                        className="flex items-center justify-between w-full px-4 py-2.5 text-xs font-bold text-success bg-success/5 touch-target"
-                        aria-expanded={mobileServiceCategory === "rehab"}
-                      >
-                        <span>Rehabilitation</span>
-                        <ChevronDown className={cn("h-3 w-3 transition-transform duration-200", mobileServiceCategory === "rehab" && "rotate-180")} aria-hidden="true" />
-                      </button>
-                      {mobileServiceCategory === "rehab" && (
-                        <div className="bg-card/50 px-2 py-1 space-y-1">
-                          {rehabServices.map((service) => (
-                            <button
-                              key={service.id}
-                              onClick={() => handleNavClick(service.id)}
-                              className="block w-full text-left px-3 py-2 text-xs text-muted-foreground hover:text-success hover:bg-success/5 rounded-md font-medium touch-target"
-                            >
-                              {service.name}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    <button
-                      onClick={() => handleNavClick("services")}
-                      className="block w-full text-center px-4 py-2.5 text-xs font-bold text-primary border border-primary/20 hover:bg-primary/5 rounded-lg transition-colors touch-target"
-                    >
-                      View All Services
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => handleNavClick(item.id)}
-                  className={cn(
-                    "block w-full text-left px-3 py-3 text-sm font-semibold rounded-lg transition-colors touch-target",
-                    activeSection === item.id
-                      ? "text-primary bg-primary/5"
-                      : "text-foreground/80 hover:bg-muted"
-                  )}
-                  aria-current={activeSection === item.id ? "page" : undefined}
-                >
-                  {item.name}
-                </button>
-              )}
-            </div>
-          ))}
-
-          <div className="pt-4 mt-4 border-t border-border">
-            <Button 
-              onClick={() => {
-                onBookAppointment()
-                setMobileMenuOpen(false)
-              }}
-              className="w-full bg-success hover:bg-success/90 font-semibold py-5 rounded-xl shadow-md touch-target"
-            >
-              Book Appointment
-            </Button>
+          {/* Mobile — emergency strip */}
+          <div className="bg-[#0b1f4a] px-4 py-3 flex items-center justify-between">
+            <a href="tel:+919XXXXXXXXX" className="flex items-center gap-2 text-white text-sm font-bold whitespace-nowrap">
+              <Phone className="h-4 w-4 text-[#0d9488] flex-shrink-0" />
+              <span className="whitespace-nowrap">Emergency: +91 9XXX XXX XXX</span>
+            </a>
+            <span className="text-white/50 text-xs whitespace-nowrap flex-shrink-0">24/7</span>
           </div>
-        </nav>
+
+          <nav className="px-4 py-3 space-y-0.5">
+
+            {/* Primary nav items */}
+            {primaryNav.map((item) => (
+              <div key={item.id}>
+                {item.hasDropdown ? (
+                  <>
+                    <button
+                      onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                      className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold rounded-xl text-[#0b1f4a] hover:bg-slate-50 transition-colors"
+                    >
+                      <span className="whitespace-nowrap">{item.name}</span>
+                      <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform flex-shrink-0", mobileServicesOpen && "rotate-180")} />
+                    </button>
+
+                    <div className={cn("overflow-hidden transition-all duration-300 pl-2", mobileServicesOpen ? "max-h-[600px]" : "max-h-0")}>
+                      {[
+                        { key: "allopathy", label: "Allopathy", sub: "Modern Medicine", Icon: Stethoscope, color: "text-[#0b1f4a] bg-blue-50 border-blue-100", items: allopathyServices },
+                        { key: "ayurveda", label: "Ayurveda", sub: "Traditional Healing", Icon: Leaf, color: "text-[#0d9488] bg-teal-50 border-teal-100", items: ayurvedaServices },
+                        { key: "rehab", label: "Rehabilitation", sub: "Recovery & Therapy", Icon: Activity, color: "text-[#7c3aed] bg-violet-50 border-violet-100", items: rehabServices },
+                      ].map((cat) => (
+                        <div key={cat.key} className="mb-2">
+                          <button
+                            onClick={() => setMobileCat(mobileCat === cat.key ? null : cat.key)}
+                            className={cn("flex items-center justify-between w-full px-4 py-2.5 rounded-xl border text-xs font-bold uppercase tracking-wider transition-colors", cat.color)}
+                          >
+                            <div className="flex items-center gap-2">
+                              <cat.Icon className="h-3.5 w-3.5 flex-shrink-0" />
+                              <span className="whitespace-nowrap">{cat.label}</span>
+                              <span className="font-normal normal-case tracking-normal opacity-60 whitespace-nowrap">— {cat.sub}</span>
+                            </div>
+                            <ChevronDown className={cn("h-3.5 w-3.5 transition-transform flex-shrink-0", mobileCat === cat.key && "rotate-180")} />
+                          </button>
+                          {mobileCat === cat.key && (
+                            <div className="mt-1 ml-2 bg-white rounded-xl border border-slate-100 overflow-hidden">
+                              {cat.items.map((s) => (
+                                <button
+                                  key={s.id}
+                                  onClick={() => go(s.id)}
+                                  className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50 font-medium border-b border-slate-50 last:border-0 transition-colors whitespace-nowrap"
+                                >
+                                  <span className="whitespace-nowrap">{s.name}</span>
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => go(item.id)}
+                    className={cn(
+                      "block w-full text-left px-4 py-3 text-sm font-semibold rounded-xl transition-colors whitespace-nowrap",
+                      activeSection === item.id ? "bg-[#0b1f4a] text-white" : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
+                    )}
+                  >
+                    <span className="whitespace-nowrap">{item.name}</span>
+                  </button>
+                )}
+              </div>
+            ))}
+
+            {/* More items */}
+            <div className="pt-1 border-t border-slate-100 mt-1">
+              <button
+                onClick={() => setMobileMoreOpen(!mobileMoreOpen)}
+                className="flex items-center justify-between w-full px-4 py-3 text-sm font-semibold text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50 rounded-xl transition-colors"
+              >
+                <span className="whitespace-nowrap">More Pages</span>
+                <ChevronDown className={cn("h-4 w-4 text-slate-400 transition-transform flex-shrink-0", mobileMoreOpen && "rotate-180")} />
+              </button>
+              <div className={cn("overflow-hidden transition-all duration-300 pl-2", mobileMoreOpen ? "max-h-96" : "max-h-0")}>
+                {secondaryNav.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => go(item.id)}
+                    className={cn(
+                      "block w-full text-left px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors whitespace-nowrap",
+                      activeSection === item.id ? "bg-[#0b1f4a] text-white" : "text-slate-600 hover:text-[#0b1f4a] hover:bg-slate-50"
+                    )}
+                  >
+                    <span className="whitespace-nowrap">{item.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile CTA */}
+            <div className="pt-3 pb-2">
+              <Button
+                onClick={() => { onBookAppointment(); setMobileOpen(false) }}
+                className="w-full bg-[#0b1f4a] hover:bg-[#1e4080] text-white font-bold py-6 rounded-xl gap-2 text-base whitespace-nowrap"
+              >
+                <Calendar className="h-5 w-5 flex-shrink-0" />
+                <span className="whitespace-nowrap">Book Appointment</span>
+              </Button>
+            </div>
+          </nav>
+        </div>
       </div>
+
     </header>
   )
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Calendar, User, Phone, Mail, FileText, CheckCircle, Sparkles, Clock, Stethoscope, ArrowRight } from "lucide-react"
+import { X, Calendar, UserRound, Phone, Mail, FileText, CheckCircle, ClipboardCheck, Clock, Stethoscope, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
@@ -158,7 +158,7 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
                       <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
                         <div className="space-y-2">
                           <label htmlFor="name" className="text-sm font-medium text-foreground flex items-center gap-2">
-                            <User className="h-4 w-4 text-primary" />
+                            <UserRound className="h-4 w-4 text-primary" />
                             Full Name
                           </label>
                           <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Enter your full name" className="h-12 rounded-xl" required />
@@ -241,7 +241,7 @@ export function AppointmentModal({ isOpen, onClose }: AppointmentModalProps) {
                       <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
                         <div className="bg-muted rounded-2xl p-5 space-y-4">
                           <h4 className="font-medium text-foreground flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-primary" />
+                            <ClipboardCheck className="w-4 h-4 text-primary" />
                             Review Your Details
                           </h4>
                           <div className="grid grid-cols-2 gap-4 text-sm">

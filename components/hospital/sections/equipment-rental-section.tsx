@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { 
-  Wind, Bed, HeartPulse, Activity, Phone, MessageCircle, 
+import {
+  AirVent, BedDouble, HeartPulse, Activity, Phone, MessageCircle,
   CheckCircle, Info, ArrowRight, ShieldCheck, Truck, Sparkles
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -24,7 +24,7 @@ const equipmentItems = [
   {
     id: "oxygen-concentrator",
     name: "Oxygen Concentrator",
-    icon: Wind,
+    icon: AirVent,
     description: "Medical-grade oxygen concentrators for home care. Continuous oxygen therapy support available in 5L and 10L output capacities.",
     features: ["5L/10L Flows", "Low Decibel Noise", "Easy Humidifier Box", "Battery & Inverter Ready"],
     availability: "In Stock",
@@ -33,7 +33,7 @@ const equipmentItems = [
   {
     id: "bipap",
     name: "BiPAP Machine",
-    icon: Wind,
+    icon: AirVent,
     description: "Bilevel Positive Airway Pressure machines with automated pressure settings, comfortable mask interfaces, and built-in humidification.",
     features: ["Auto-Titrating Mode", "Built-in Humidifier", "Compliance Records", "Full-face Masks"],
     availability: "In Stock",
@@ -42,7 +42,7 @@ const equipmentItems = [
   {
     id: "cpap",
     name: "CPAP Machine",
-    icon: Wind,
+    icon: AirVent,
     description: "Continuous Positive Airway Pressure devices for sleep apnea management. Travel-friendly designs with mask leak alerts.",
     features: ["Whisper Quiet", "Auto Ramp Mode", "Leak Detection Alerts", "Travel Bag Included"],
     availability: "In Stock",
@@ -51,7 +51,7 @@ const equipmentItems = [
   {
     id: "hospital-cot",
     name: "Hospital Cots / Beds",
-    icon: Bed,
+    icon: BedDouble,
     description: "Adjustable 2-function and 5-function electric/manual cots for home patient care. Side railings and orthopedic mattress included.",
     features: ["Electric & Manual", "Height Adjustments", "Side Safety Rails", "Fluid-proof Mattress"],
     availability: "In Stock",
@@ -60,7 +60,7 @@ const equipmentItems = [
   {
     id: "ventilator",
     name: "Home Ventilator",
-    icon: HeartPulse,
+    icon: AirVent,
     description: "Advanced mechanical ventilators for home recovery support. Includes delivery, setup calibration, and 24/7 technical on-call assistance.",
     features: ["Portable Form", "Volume & Pressure Modes", "Long Battery Backup", "24/7 Specialist Support"],
     availability: "Limited Stock",

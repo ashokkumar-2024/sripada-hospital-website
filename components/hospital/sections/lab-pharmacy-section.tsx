@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { TestTube, Pill, Clock, Home, FileText, Truck, Phone, Sparkles, ArrowRight } from "lucide-react"
+import { TestTube2, Pill, Clock, House, FileText, Truck, Phone, Sparkles, ArrowRight } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -22,9 +22,9 @@ const labServices = [
 
 const labFeatures = [
   { icon: Clock, title: "Quick Results", description: "Most reports within 24 hours" },
-  { icon: Home, title: "Home Collection", description: "Sample collection at your doorstep" },
+  { icon: House, title: "Home Collection", description: "Sample collection at your doorstep" },
   { icon: FileText, title: "Online Reports", description: "Access reports via WhatsApp/Email" },
-  { icon: TestTube, title: "NABL Standards", description: "Quality assured testing" },
+  { icon: TestTube2, title: "NABL Standards", description: "Quality assured testing" },
 ]
 
 const pharmacyFeatures = [
@@ -100,7 +100,7 @@ export function LabPharmacySection() {
             <div className="max-w-5xl mx-auto">
               <div className="text-center max-w-3xl mx-auto mb-12">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 text-accent text-xs font-bold uppercase tracking-wider mb-4">
-                  <TestTube className="h-3 w-3" aria-hidden="true" />
+                  <TestTube2 className="h-3 w-3" aria-hidden="true" />
                   Diagnostics
                 </span>
                 <h2 className="text-2xl md:text-3xl font-sans font-bold text-foreground">

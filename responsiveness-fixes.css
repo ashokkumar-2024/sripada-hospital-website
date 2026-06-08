@@ -1,0 +1,45 @@
+/* Enhanced Responsiveness Fixes */
+
+/* 1. Fluid Typography */
+html {
+  font-size: clamp(16px, 2.5vw, 18px);
+}
+
+/* 2. Better Breakpoints */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Tablet-specific styles */
+  .mega-menu {
+    width: 90vw !important;
+    max-width: 600px !important;
+  }
+  
+  .header-cta {
+    display: none; /* Hide less important CTAs on tablets */
+  }
+}
+
+/* 3. Touch-Friendly Interactions */
+@media (max-width: 1024px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* 4. Improved Mobile Layout */
+@media (max-width: 767px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .text-responsive {
+    font-size: clamp(0.875rem, 4vw, 1rem);
+  }
+}
+
+/* 5. Better Scrolling */
+.mobile-menu {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}

@@ -1,18 +1,12 @@
 import type { Metadata } from 'next'
-import { Figtree, Noto_Sans } from 'next/font/google'
+import { Roboto } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const figtree = Figtree({ 
+const roboto = Roboto({ 
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: '--font-figtree'
-})
-
-const notoSans = Noto_Sans({ 
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "700"],
-  variable: '--font-noto-sans'
+  weight: ["300", "400", "500", "700", "900"],
+  variable: '--font-roboto'
 })
 
 export const metadata: Metadata = {
@@ -23,19 +17,12 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: '/Sripada Hospital (4).png',
+        sizes: '32x32',
+        type: 'image/png',
       },
     ],
-    apple: '/apple-icon.png',
+    apple: '/Sripada Hospital (4).png',
   },
   openGraph: {
     title: 'Sripada Multi-Speciality Hospitals',
@@ -56,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${figtree.variable} ${notoSans.variable} bg-background`}>
+    <html lang="en" className={`${roboto.variable} bg-background`}>
       <body className="font-sans antialiased">
         <a href="#main-content" className="skip-link">Skip to main content</a>
         <main id="main-content">{children}</main>
