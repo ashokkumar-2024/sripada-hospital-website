@@ -390,28 +390,28 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
                 {/* Left tall image */}
                 <div className="rounded-2xl overflow-hidden" style={{ gridRow: "span 2", aspectRatio: "3/4" }}>
                   <img
-                    src="/Sripada Hospital.png"
-                    alt="Sripada Hospital"
+                    src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=600&q=80"
+                    alt="Hospital doctors team"
                     className="w-full h-full object-cover"
                   />
                 </div>
                 {/* Top right image */}
                 <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: "4/3" }}>
                   <img
-                    src="/Sripada Hospital (2).png"
-                    alt="Sripada Hospital Facility"
+                    src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80"
+                    alt="Modern hospital facility"
                     className="w-full h-full object-cover"
                   />
                 </div>
-                {/* Bottom right — stat card */}
+                {/* Bottom right — stat overlay */}
                 <div className="rounded-2xl overflow-hidden relative" style={{ aspectRatio: "4/3" }}>
                   <img
-                    src="/Sripada Hospital (1).png"
-                    alt="Sripada Hospital Care"
+                    src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=600&q=80"
+                    alt="Surgery care"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 flex items-end p-4"
-                    style={{ background: "linear-gradient(to top, rgba(41,93,147,0.85) 0%, transparent 60%)" }}>
+                    style={{ background: "linear-gradient(to top, rgba(41,93,147,0.88) 0%, transparent 55%)" }}>
                     <div className="flex items-center gap-3">
                       <Award className="h-8 w-8 flex-shrink-0 text-white" />
                       <div>
