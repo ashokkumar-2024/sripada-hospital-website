@@ -242,6 +242,10 @@
 ::-webkit-scrollbar-thumb { background: #b0bec5; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #78909c; }
 
+/* hide scrollbar for stats row */
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
 /* ===== SKIP LINK ===== */
 .skip-link {
   position: absolute;

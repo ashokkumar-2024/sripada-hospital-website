@@ -289,18 +289,16 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
       ══════════════════════════════════════ */}
       <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-16">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="flex overflow-x-auto gap-4 pb-2 md:grid md:grid-cols-5 md:overflow-visible scrollbar-hide">
             {stats.map((s, i) => (
-              <div key={i} className="fade-up group flex flex-col items-center text-center gap-4 py-8 px-4 rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1"
+              <div key={i} className="fade-up group flex flex-col items-center text-center gap-4 py-8 px-4 rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1 flex-shrink-0 w-40 md:w-auto"
                 style={{ borderColor: `${s.color}22`, background: `${s.color}06` }}
                 onMouseEnter={e => { e.currentTarget.style.background = `${s.color}12`; e.currentTarget.style.borderColor = `${s.color}55` }}
                 onMouseLeave={e => { e.currentTarget.style.background = `${s.color}06`; e.currentTarget.style.borderColor = `${s.color}22` }}>
-                {/* icon */}
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
                   style={{ background: s.color }}>
                   <s.icon className="h-6 w-6 text-white" />
                 </div>
-                {/* value */}
                 <div>
                   <p className="font-black leading-none" style={{ fontSize: 36, color: s.color }}>{s.value}</p>
                   <p className="mt-2 font-semibold" style={{ fontSize: 13, color: "#64748b", letterSpacing: "0.02em" }}>{s.label}</p>
@@ -423,15 +421,7 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
                 </div>
               </div>
 
-              {/* Floating badge */}
-              <div className="absolute -bottom-2 left-4 lg:left-1/2 lg:-translate-x-1/2 rounded-2xl px-5 py-4 flex items-center gap-3 max-w-full"
-                style={{ background: "#007878", boxShadow: "0 12px 32px rgba(0,120,120,0.35)" }}>
-                <CheckCircle className="h-5 w-5 text-white flex-shrink-0" />
-                <div>
-                  <p className="font-bold text-white" style={{ fontSize: 13 }}>NABH Accredited</p>
-                  <p style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>Quality Certified Hospital</p>
-                </div>
-              </div>
+
             </div>
 
             {/* ── Right: Content ── */}
