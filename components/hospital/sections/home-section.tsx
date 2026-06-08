@@ -390,7 +390,7 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
                 {/* Left tall image */}
                 <div className="rounded-2xl overflow-hidden" style={{ gridRow: "span 2", aspectRatio: "3/4" }}>
                   <img
-                    src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=600&q=80"
+                    src="https://images.unsplash.com/photo-1666214280557-f1b5022eb634?w=800&q=90"
                     alt="Hospital doctors team"
                     className="w-full h-full object-cover"
                   />
@@ -398,7 +398,7 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
                 {/* Top right image */}
                 <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: "4/3" }}>
                   <img
-                    src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600&q=80"
+                    src="https://images.unsplash.com/photo-1504813184591-01572f98c85f?w=600&q=90"
                     alt="Modern hospital facility"
                     className="w-full h-full object-cover"
                   />
@@ -406,7 +406,7 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
                 {/* Bottom right — stat overlay */}
                 <div className="rounded-2xl overflow-hidden relative" style={{ aspectRatio: "4/3" }}>
                   <img
-                    src="https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=600&q=80"
+                    src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=90"
                     alt="Surgery care"
                     className="w-full h-full object-cover"
                   />
