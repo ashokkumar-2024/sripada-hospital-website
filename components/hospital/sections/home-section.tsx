@@ -484,8 +484,8 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
       <section className="py-24 relative overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img src="/Sripada Hospital.png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
-          <div className="absolute inset-0" style={{ background: "rgba(41,93,147,0.88)" }} />
+          <img src="/Sripada Hospital _ Web Pattern.png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <div className="absolute inset-0" style={{ background: "rgba(41,93,147,0.75)" }} />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-16">
           <SectionHeading
@@ -569,7 +569,7 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
       <section className="py-24 relative overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img src="/Sripada Hospital.png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <img src="/Sripada Hospital _ Web Pattern.png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
           <div className="absolute inset-0" style={{ background: "rgba(41,93,147,0.88)" }} />
         </div>
         {/* dot texture */}
@@ -658,8 +658,8 @@ export function HomeSection({ onNavigate, onBookAppointment }: HomeSectionProps)
       <section className="py-20 relative overflow-hidden">
         {/* Background image */}
         <div className="absolute inset-0">
-          <img src="/Sripada Hospital (1).png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
-          <div className="absolute inset-0" style={{ background: "rgba(0,120,120,0.82)" }} />
+          <img src="/Sripada Hospital _ Web Pattern (1).png" alt="" className="w-full h-full object-cover" aria-hidden="true" />
+          <div className="absolute inset-0" style={{ background: "rgba(0,120,120,0.75)" }} />
         </div>
         {/* dot texture */}
         <div className="absolute inset-0 opacity-[0.06]"

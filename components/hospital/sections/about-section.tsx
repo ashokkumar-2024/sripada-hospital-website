@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  Users, Award, Heart, Stethoscope, Leaf, Activity, Target, Eye,
+  Award, Heart, Stethoscope, Leaf, Activity, Target, Eye,
   Sparkles, Shield, CheckCircle, Star, Building2, GraduationCap
 } from "lucide-react"
 
@@ -257,8 +257,43 @@ export function AboutSection() {
         </div>
       </section>
 
+      {/* ===== AYURVEDIC DIVISION LEADERSHIP ===== */}
+      <section className="pt-24 pb-10 bg-white">
+        <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
+          <div className="text-center mb-14">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-teal-50 to-slate-50 border border-teal-100 text-xs font-bold tracking-widest uppercase text-[#0d9488] mb-5">
+              Leadership
+            </span>
+            <h2 className="text-3xl md:text-4xl font-sans font-bold text-[#0b1f4a]">Ayurvedic Division</h2>
+          </div>
+
+          <div className="max-w-4xl mx-auto bg-[#f0f4f8] rounded-2xl sm:rounded-3xl overflow-hidden border border-[#e8eef6]">
+            {/* Compact top strip */}
+            <div className="relative bg-gradient-to-r from-[#0d9488] to-[#0b7c72] px-6 sm:px-10 py-5 text-center">
+              <h3 className="text-lg sm:text-xl font-sans font-bold text-white leading-tight">Dr. Sree Ranjitha D</h3>
+              <p className="text-white/75 text-sm font-semibold">BAMS, MD (Dravyaguna)</p>
+            </div>
+
+            <div className="space-y-4 text-[#475569] leading-relaxed p-8 sm:p-12">
+              <p>
+                Dr SREE RANJITHA D, is a dedicated Ayurvedic physician and the Managing Director of the Ayurvedic Division at the hospital. She completed her BAMS from the prestigious SDM College of Ayurveda, Udupi, in 2018, followed by her postgraduate specialization in Dravyaguna, the Ayurvedic science of medicinal substances, their actions, properties, and therapeutic indications.
+              </p>
+              <p>
+                Her expertise in Dravyaguna enables her to develop and prescribe personalized Ayurvedic formulations based on each individual's unique health needs and condition. With a deep passion for Ayurveda and patient care, she is committed to providing premium classical Ayurvedic treatments rooted in traditional principles and tailored to the individual.
+              </p>
+              <p>
+                With extensive clinical experience of treating more than 2000+ patients, she is specialised in treating skin disorders like Psoriasis, Eczema, Urticaria etc, Gut and Metabolic disorders like Gastric issues, IBS, Diabetes, Hypothyroidism major spine and orthopaedic conditions like Cervical and Lumbar spondylosis, IVDP, Osteoarthritis, Osteoporosis, Rheumatoid Arthritis and all Gynecological concerns such as PCOD, Infertility and dysmenorrhea.
+              </p>
+              <p>
+                Her approach focuses on not only managing symptoms but also understanding and addressing the underlying causes of illness, while supporting preventive wellness and long-term health. Her vision is to help individuals achieve better health, vitality, and quality of life through authentic, personalized, and holistic Ayurvedic care.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== VALUES ===== */}
-      <section className="py-24 bg-white">
+      <section className="pt-10 pb-24 bg-white">
         <div className="container mx-auto px-4 lg:px-8 max-w-7xl">
           <div className="text-center mb-14">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-slate-50 border border-blue-100 text-xs font-bold tracking-widest uppercase text-[#0b1f4a] mb-5">

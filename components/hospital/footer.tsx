@@ -42,12 +42,15 @@ export function Footer({ onNavigate }: FooterProps) {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0d9488]/20 to-transparent" />
         <div className="w-full px-4 lg:px-8 py-16 relative">
           <div className="max-w-7xl mx-auto">
-            <div className="bg-gradient-to-r from-[#0d9488] to-[#0b7c72] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 shadow-2xl">
-              <div className="text-white text-center lg:text-left">
+            <div className="relative bg-gradient-to-r from-[#0d9488] to-[#0b7c72] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 shadow-2xl overflow-hidden">
+              <div className="absolute inset-0">
+                <img src="/Sripada Hospital _ Web Pattern (1).png" alt="" className="w-full h-full object-cover opacity-60" aria-hidden="true" />
+              </div>
+              <div className="relative text-white text-center lg:text-left">
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-sans font-bold mb-2">Need Medical Assistance?</h3>
                 <p className="text-white/80 text-base">Our team is available 24/7 to help you with appointments and emergencies.</p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+              <div className="relative flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <a
                   href="tel:+919XXXXXXXXX"
                   className="inline-flex items-center justify-center gap-2 bg-white text-[#0b1f4a] hover:bg-white/90 font-bold px-6 py-3.5 rounded-xl transition-all hover:scale-[1.02] shadow-lg"

@@ -161,7 +161,7 @@ export function Header({ activeSection, onNavigate, onBookAppointment }: HeaderP
             </a>
             <div className="hidden lg:flex items-center gap-1.5 pl-4 border-l border-white/15 text-white/60 text-xs">
               <MapPin className="h-3 w-3 text-white/40 flex-shrink-0" />
-              Hyderabad, Telangana
+              Bengaluru, Karnataka
             </div>
           </div>
           {/* Right */}
